@@ -1,0 +1,18 @@
+﻿<Window x:Class="TextToSpeechV3.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TextToSpeechV3"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+	<StackPanel>
+		<TextBox x:Name="textBox" Text="this is a test message"/>
+		<Button Content="Button" Click="Button_Click"/>
+		<TextBox x:Name="txtSpeechRate" Text="1.6"/>
+		<ListBox x:Name="lbVoices"></ListBox>
+		<TextBox x:Name="txtResult" IsReadOnly="True"/>
+		<Button Content="RegisterHotkey" Click="Button_Click_1"></Button>
+		<TextBlock x:Name="txtCopyResults"/>
+	</StackPanel>
+</Window>
