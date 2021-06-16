@@ -18,7 +18,6 @@ namespace TextToSpeechV3.Hotkeys
 		{
 			IntPtr hWnd = new WindowInteropHelper(window).Handle;
 			uint uintKey = (uint)KeyInterop.VirtualKeyFromKey(key);
-			int x = 1;
 			_id = GetHashCode();
 			RegisterHotKey(hWnd, _id, (uint)modifier, uintKey);
 			ComponentDispatcher.ThreadPreprocessMessage += ThreadPreprocessMessageMethod;

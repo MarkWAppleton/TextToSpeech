@@ -24,19 +24,22 @@ namespace TextToSpeechV3.Views
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		ISpeechManager speechManager;
+		ISpeechManager _speechManager;
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			speechManager = new WindowsMediaSpeechSynthesis();
-			lbVoices.ItemsSource = speechManager.GetVoices();
+			//speechManager = new WindowsMediaSpeechSynthesis();
+			_speechManager = new SAPI();
+			lbVoices.ItemsSource = _speechManager.GetVoices();
 			lbVoices.SelectedIndex = 0;
 		}
 
 		private async void Button_Click(object sender, RoutedEventArgs e)
 		{
-			await speechManager.PlayAudio(textBox.Text,lbVoices.SelectedItem.ToString(), Double.Parse(txtSpeechRate.Text));
+			_speechManager.SetRate(Double.Parse(txtSpeechRate.Text));
+			_speechManager.PlayAudio(textBox.Text, null, 0);
+			//await speechManager.PlayAudio(textBox.Text,lbVoices.SelectedItem.ToString(), Double.Parse(txtSpeechRate.Text));
 		}
 
 		private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -53,7 +56,12 @@ namespace TextToSpeechV3.Views
 			Thread.Sleep(80);//TODO make this configurable
 			string copiedText = System.Windows.Clipboard.GetText();
 			txtCopyResults.Text = copiedText;
-			speechManager.PlayAudio(copiedText, lbVoices.SelectedItem.ToString(), Double.Parse(txtSpeechRate.Text));
+			_speechManager.PlayAudio(copiedText, lbVoices.SelectedItem.ToString(), Double.Parse(txtSpeechRate.Text));
+		}
+
+		private void lbVoices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			_speechManager.SetVoice(lbVoices.SelectedItem.ToString());
 		}
 	}
 }

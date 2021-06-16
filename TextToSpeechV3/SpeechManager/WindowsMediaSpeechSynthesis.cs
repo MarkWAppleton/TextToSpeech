@@ -8,19 +8,19 @@ namespace TextToSpeechV3.SpeechManager
 {
 	public class WindowsMediaSpeechSynthesis : ISpeechManager
 	{
+		private SpeechSynthesizer _synth;
 		public WindowsMediaSpeechSynthesis()
 		{
-
+			_synth = new SpeechSynthesizer();
 		}
 
 		public async Task PlayAudio(string text, string voiceName, double speechRate)
 		{
 			Windows.Media.Playback.MediaPlayer mediaPlayer = new Windows.Media.Playback.MediaPlayer();
-			SpeechSynthesizer synth = new SpeechSynthesizer();
-
-			synth.Voice = SpeechSynthesizer.AllVoices.Where(w => w.DisplayName == voiceName).FirstOrDefault();
-			synth.Options.SpeakingRate = speechRate;
-			SpeechSynthesisStream stream = await synth.SynthesizeTextToStreamAsync(text);
+			
+			//synth.Voice = SpeechSynthesizer.AllVoices.Where(w => w.DisplayName == voiceName).FirstOrDefault();
+			//_synth.Options.SpeakingRate = speechRate;
+			SpeechSynthesisStream stream = await _synth.SynthesizeTextToStreamAsync(text);
 
 			mediaPlayer.Source = Windows.Media.Core.MediaSource.CreateFromStream(stream, stream.ContentType);
 			mediaPlayer.AutoPlay = true;
@@ -30,5 +30,14 @@ namespace TextToSpeechV3.SpeechManager
 			return SpeechSynthesizer.AllVoices.Select(s => s.DisplayName);
 		}
 
+		public void SetVoice(string name)
+		{
+			_synth.Voice = SpeechSynthesizer.AllVoices.Where(w => w.DisplayName == name).FirstOrDefault();
+		}
+
+		public void SetRate(double rate)
+		{
+			_synth.Options.SpeakingRate = rate;
+		}
 	}
 }

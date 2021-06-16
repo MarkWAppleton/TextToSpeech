@@ -10,7 +10,7 @@
 		<TextBox x:Name="textBox" Text="this is a test message"/>
 		<Button Content="Button" Click="Button_Click"/>
 		<TextBox x:Name="txtSpeechRate" Text="1.6"/>
-		<ListBox x:Name="lbVoices"></ListBox>
+		<ListBox x:Name="lbVoices" SelectionChanged="lbVoices_SelectionChanged"></ListBox>
 		<TextBox x:Name="txtResult" IsReadOnly="True"/>
 		<Button Content="RegisterHotkey" Click="Button_Click_1"></Button>
 		<TextBlock x:Name="txtCopyResults"/>

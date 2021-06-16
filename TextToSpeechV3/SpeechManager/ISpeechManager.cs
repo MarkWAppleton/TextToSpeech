@@ -10,5 +10,9 @@ namespace TextToSpeechV3.SpeechManager
 		Task PlayAudio(string text, string voiceName, double speechRate);
 
 		IEnumerable<string> GetVoices();
+
+		void SetVoice(string name);
+
+		void SetRate(double rate);
 	}
 }
