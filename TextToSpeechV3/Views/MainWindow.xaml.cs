@@ -30,7 +30,7 @@ namespace TextToSpeechV3.Views
 		public MainWindow()
 		{
 			InitializeComponent();
-			this.DataContext = new MainWindowViewModel();
+			this.DataContext = new MainWindowViewModel(this);
 			//speechManager = new WindowsMediaSpeechSynthesis();
 			//_speechManager = new SAPI();
 			//lbVoices.ItemsSource = _speechManager.GetVoices();

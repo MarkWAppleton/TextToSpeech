@@ -17,6 +17,7 @@ namespace TextToSpeechV3.SpeechManager
 		public SAPI()
 		{
 			_spVoice = new SpVoice();
+			_spVoice.EndStream += SPVoiceEndSpeaking;
 			_isSpeaking = false;
 		}
 
@@ -80,5 +81,11 @@ namespace TextToSpeechV3.SpeechManager
 			var decimalPart = value - Math.Truncate(value);
 			return (int)decimalPart * 10;
 		}
+
+		private void SPVoiceEndSpeaking(int StreamNumber, object StreamPosition)
+		{
+			_isSpeaking = false;
+		}
+
 	}
 }
