@@ -4,16 +4,20 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeechLib;
 using System.Linq;
+using System.Threading;
 
 namespace TextToSpeechV3.SpeechManager
 {
 	public class SAPI : ISpeechManager
 	{
 		private SpVoice _spVoice;
+		private bool _isSpeaking;
+		private CancellationTokenSource _cancellationTokenSource;
 
 		public SAPI()
 		{
 			_spVoice = new SpVoice();
+			_isSpeaking = false;
 		}
 
 		public IEnumerable<string> GetVoices()
@@ -33,7 +37,16 @@ namespace TextToSpeechV3.SpeechManager
 
 		public Task PlayAudio(string text, string voiceName, double speechRate)
 		{
-			_spVoice.Speak(text, SpeechVoiceSpeakFlags.SVSFDefault);
+			if (_isSpeaking)
+			{
+				_spVoice.Skip("Sentence", int.MaxValue);
+				_isSpeaking = false;
+			}
+			else
+			{
+				_isSpeaking = true;
+				int queueID = _spVoice.Speak(text, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
+			}
 			return null;
 		}
 
