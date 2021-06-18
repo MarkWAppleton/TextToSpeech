@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 	<StackPanel>
-		<TextBox x:Name="textBox" Text="this is a test message"/>
-		<Button Content="Button" Click="Button_Click"/>
+		<TextBox Name="textBox" Text="{Binding SelectedText, Mode=TwoWay}"/>
+		<Button Content="Button" Command="{Binding Path=SpeechTestButtonCommand}" CommandParameter="{Binding ElementName=textBox,Path=Text}" />
 		<TextBox x:Name="txtSpeechRate" Text="1.6"/>
 		<ListBox x:Name="lbVoices" SelectionChanged="lbVoices_SelectionChanged"></ListBox>
 		<TextBox x:Name="txtResult" IsReadOnly="True"/>

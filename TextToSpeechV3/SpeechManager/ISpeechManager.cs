@@ -14,5 +14,7 @@ namespace TextToSpeechV3.SpeechManager
 		void SetVoice(string name);
 
 		void SetRate(double rate);
+
+		void setVolume(double volume);
 	}
 }

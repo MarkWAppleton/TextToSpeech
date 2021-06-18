@@ -54,10 +54,18 @@ namespace TextToSpeechV3.SpeechManager
 		}
 		public void SetRate(double rate)
 		{
-			var decimalPart = rate - Math.Truncate(rate);
-			decimalPart = decimalPart * 10;
+			_spVoice.Rate = ConvertDoubleToInt(rate);
+		}
 
-			_spVoice.Rate = (int)decimalPart;
+		public void setVolume(double volume)
+		{
+			_spVoice.Volume = ConvertDoubleToInt(volume);
+		}
+
+		private int ConvertDoubleToInt(double value)
+		{
+			var decimalPart = value - Math.Truncate(value);
+			return (int)decimalPart * 10;
 		}
 	}
 }

@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TextToSpeechV3.Hotkeys;
 using TextToSpeechV3.SpeechManager;
+using TextToSpeechV3.ViewModels;
 
 namespace TextToSpeechV3.Views
 {
@@ -29,6 +30,7 @@ namespace TextToSpeechV3.Views
 		public MainWindow()
 		{
 			InitializeComponent();
+			this.DataContext = new MainWindowViewModel();
 			//speechManager = new WindowsMediaSpeechSynthesis();
 			_speechManager = new SAPI();
 			lbVoices.ItemsSource = _speechManager.GetVoices();

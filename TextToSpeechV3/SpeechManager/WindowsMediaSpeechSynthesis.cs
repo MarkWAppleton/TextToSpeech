@@ -39,5 +39,10 @@ namespace TextToSpeechV3.SpeechManager
 		{
 			_synth.Options.SpeakingRate = rate;
 		}
+
+		public void setVolume(double volume)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
