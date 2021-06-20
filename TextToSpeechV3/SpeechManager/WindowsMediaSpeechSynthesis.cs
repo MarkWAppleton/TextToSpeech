@@ -10,12 +10,15 @@ namespace TextToSpeechV3.SpeechManager
 	public class WindowsMediaSpeechSynthesis : ISpeechManager
 	{
 		private SpeechSynthesizer _synth;
+
+		public EnumSpeechEngine EngineType => EnumSpeechEngine.Windows10;
+
 		public WindowsMediaSpeechSynthesis()
 		{
 			_synth = new SpeechSynthesizer();
 		}
 
-		public async Task PlayAudio(string text, string voiceName, double speechRate)
+		public async Task SpeakText(string text)
 		{
 			Windows.Media.Playback.MediaPlayer mediaPlayer = new Windows.Media.Playback.MediaPlayer();
 			
@@ -26,6 +29,12 @@ namespace TextToSpeechV3.SpeechManager
 			mediaPlayer.Source = Windows.Media.Core.MediaSource.CreateFromStream(stream, stream.ContentType);
 			mediaPlayer.AutoPlay = true;
 		}
+
+		public Task SpeakTextWithSettings(string text, SpeechSettings settings)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<string> GetVoices()
 		{
 			return SpeechSynthesizer.AllVoices.Select(s => s.DisplayName);

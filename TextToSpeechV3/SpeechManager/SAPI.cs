@@ -15,6 +15,8 @@ namespace TextToSpeechV3.SpeechManager
 		private bool _isSpeaking;
 		private CancellationTokenSource _cancellationTokenSource;
 
+		public EnumSpeechEngine EngineType => EnumSpeechEngine.Legacy;
+
 		public SAPI()
 		{
 			_spVoice = new SpVoice();
@@ -37,7 +39,7 @@ namespace TextToSpeechV3.SpeechManager
 			return results;
 		}
 
-		public Task PlayAudio(string text, string voiceName, double speechRate)
+		public Task SpeakText(string text)
 		{
 			if (_isSpeaking)
 			{
@@ -107,5 +109,6 @@ namespace TextToSpeechV3.SpeechManager
 			SetRate(settings.Rate);
 			setVolume(settings.Volume);
 		}
+
 	}
 }

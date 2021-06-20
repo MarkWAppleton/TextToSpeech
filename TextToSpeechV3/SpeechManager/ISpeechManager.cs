@@ -8,7 +8,8 @@ namespace TextToSpeechV3.SpeechManager
 {
 	public interface ISpeechManager
 	{
-		Task PlayAudio(string text, string voiceName, double speechRate);
+		EnumSpeechEngine EngineType { get; }
+		Task SpeakText(string text);
 
 		IEnumerable<string> GetVoices();
 

@@ -9,5 +9,10 @@ namespace TextToSpeechV3.Model
 		public string Voice { get; set; }
 		public double Rate { get; set; }
 		public double Volume { get; set; }
+
+		public SpeechSettings ShallowClone()
+		{
+			return (SpeechSettings)this.MemberwiseClone();
+		}
 	}
 }

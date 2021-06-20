@@ -66,13 +66,13 @@ namespace TextToSpeechV3.ViewModels
 		private void SpeakHotKeyMethod(object sender, EventArgs e)
 		{
 			string text = _copyTextFromScreenService.GetTextFromScreen();
-			_speechManager.PlayAudio(text, Settings.Voice, Settings.Rate);
+			_speechManager.SpeakText(text, Settings.Voice, Settings.Rate);
 		}
 		public void SpeechTestButtonCommandMethod(string text)
 		{
 
 			_speechManager.setAllSettings(Settings);
-			_speechManager.PlayAudio(text, Settings.Voice, Settings.Rate);
+			_speechManager.SpeakText(text, Settings.Voice, Settings.Rate);
 		}
 		
 		public void SettingsButtonCommandMethod(object nothing)

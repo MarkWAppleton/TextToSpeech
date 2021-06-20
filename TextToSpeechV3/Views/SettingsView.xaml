@@ -6,31 +6,44 @@
         xmlns:local="clr-namespace:TextToSpeechV3.Views"
         mc:Ignorable="d"
         Title="SettingsView" Height="450" Width="800">
-    <Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="auto"/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition Width="30"/>
-		</Grid.ColumnDefinitions>
+	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="auto"/>
-			<RowDefinition/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="30"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
 
-		<TextBlock Grid.Row="0" Grid.Column="0" Text="Volume: "/>
-		<Slider Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding Settings.Volume}" Minimum="0" Maximum="2" SmallChange="0.1" LargeChange="0.2" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-		<TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Settings.Volume}"/>
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Volume: "/>
+			<Slider Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding Settings.Volume}" Minimum="0" Maximum="2" SmallChange="0.1" LargeChange="0.2" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+			<TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Settings.Volume}"/>
 
-		<TextBlock Grid.Row="1" Grid.Column="0" Text="Speak Rate: "/>
-		<Slider Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding Settings.Rate}" Minimum="0" Maximum="2" SmallChange="0.1" LargeChange="0.2" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-		<TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding Settings.Rate}"/>
+			<TextBlock Grid.Row="1" Grid.Column="0" Text="Speak Rate: "/>
+			<Slider Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding Settings.Rate}" Minimum="0" Maximum="2" SmallChange="0.1" LargeChange="0.2" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+			<TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding Settings.Rate}"/>
 
-		<TextBlock Grid.Row="2" Grid.Column="0" Text="Voice: "/>
-		<ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+			<TextBlock Grid.Row="2" Grid.Column="0" Text="Voice: "/>
+			<ComboBox Grid.Row="2" Grid.Column="1" />
+			<Button Grid.Row="2" Grid.Column="2" Content="TestVoice" Command="{Binding Path=SpeechTestButtonCommand}"/>
 
+		</Grid>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			
+		</Grid>
 	</Grid>
 </Window>
