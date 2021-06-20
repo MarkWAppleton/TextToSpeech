@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TextToSpeechV3.Model;
 using Windows.Media.SpeechSynthesis;
 
 namespace TextToSpeechV3.SpeechManager
@@ -43,6 +44,12 @@ namespace TextToSpeechV3.SpeechManager
 		public void setVolume(double volume)
 		{
 			throw new NotImplementedException();
+		}
+
+		public void setAllSettings(SpeechSettings settings)
+		{
+			SetVoice(settings.Voice);
+			SetRate(settings.Rate);
 		}
 	}
 }

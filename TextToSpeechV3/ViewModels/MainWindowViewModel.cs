@@ -32,8 +32,11 @@ namespace TextToSpeechV3.ViewModels
 
 		#region COMMANDS
 
-		public RelayCommand<string> SpeechTestButtonCommand { get { return _speechTestButtonCommand; } }
 		private RelayCommand<string> _speechTestButtonCommand;
+		public RelayCommand<string> SpeechTestButtonCommand { get { return _speechTestButtonCommand; } }
+
+		private RelayCommand<object> _settingsButtonCommand;
+		public RelayCommand<object> SettingsButtonCommand { get { return _settingsButtonCommand; } }
 
 		#endregion
 
@@ -44,14 +47,15 @@ namespace TextToSpeechV3.ViewModels
 			Voices = new ObservableCollection<string>(_speechManager.GetVoices());
 			Settings = new SpeechSettings();
 			Settings.Rate = 1.6;
+			Settings.Volume = 1;
 			Settings.Voice = _speechManager.GetVoices().ToList()[0];
-			SelectedText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+			SelectedText = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
+			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
 
 			_speakHotKey = new HotKeyRegister(mainWindow, Key.NumPad9, Modifiers.Control);
 			_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
 		}
-
 
 		#endregion
 
@@ -66,10 +70,15 @@ namespace TextToSpeechV3.ViewModels
 		}
 		public void SpeechTestButtonCommandMethod(string text)
 		{
+
+			_speechManager.setAllSettings(Settings);
 			_speechManager.PlayAudio(text, Settings.Voice, Settings.Rate);
-			int i = 1;
 		}
 		
+		public void SettingsButtonCommandMethod(object nothing)
+		{
+			new SettingsView(Settings, _speechManager).Show();
+		}
 
 		#endregion
 

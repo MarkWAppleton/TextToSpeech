@@ -10,9 +10,9 @@
 		<TextBox Name="textBox" Text="{Binding SelectedText, Mode=TwoWay}"/>
 		<Button Content="Button" Command="{Binding Path=SpeechTestButtonCommand}" CommandParameter="{Binding ElementName=textBox,Path=Text}" />
 		<TextBox x:Name="txtSpeechRate" Text="{Binding Settings.Rate, Mode=TwoWay}"/>
-		<ListBox x:Name="lbVoices" ItemsSource="{Binding Voices}"></ListBox>
+		<ListBox x:Name="lbVoices" ItemsSource="{Binding Voices}" SelectedItem="{Binding Settings.Voice}"></ListBox>
 		<TextBox x:Name="txtResult" IsReadOnly="True"/>
-		<Button Content="RegisterHotkey"></Button>
 		<TextBlock x:Name="txtCopyResults"/>
+		<Button Content="Settings" Command="{Binding Path=SettingsButtonCommand}"/>
 	</StackPanel>
 </Window>

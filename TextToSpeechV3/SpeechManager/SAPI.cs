@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SpeechLib;
 using System.Linq;
 using System.Threading;
+using TextToSpeechV3.Model;
 
 namespace TextToSpeechV3.SpeechManager
 {
@@ -73,13 +74,26 @@ namespace TextToSpeechV3.SpeechManager
 
 		public void setVolume(double volume)
 		{
-			_spVoice.Volume = ConvertDoubleToInt(volume);
+			_spVoice.Volume = ConvertDoubleToInt(volume) * 100;
 		}
 
+		/// <summary>
+		/// Converts 0-2 double to a whole number (1.6 becomes 6)
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		private int ConvertDoubleToInt(double value)
 		{
+			if(value >= 2)
+			{
+				return 2;
+			}
+			else if(value == 1)
+			{
+				return 1;
+			}
 			var decimalPart = value - Math.Truncate(value);
-			return (int)decimalPart * 10;
+			return (int)(decimalPart * 10);
 		}
 
 		private void SPVoiceEndSpeaking(int StreamNumber, object StreamPosition)
@@ -87,5 +101,11 @@ namespace TextToSpeechV3.SpeechManager
 			_isSpeaking = false;
 		}
 
+		public void setAllSettings(SpeechSettings settings)
+		{
+			SetVoice(settings.Voice);
+			SetRate(settings.Rate);
+			setVolume(settings.Volume);
+		}
 	}
 }
