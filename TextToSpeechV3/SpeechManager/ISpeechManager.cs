@@ -8,8 +8,11 @@ namespace TextToSpeechV3.SpeechManager
 {
 	public interface ISpeechManager
 	{
+		public bool IsSpeaking { get; }
+
 		EnumSpeechEngine EngineType { get; }
 		Task SpeakText(string text);
+		void StopSpeaking();
 
 		IEnumerable<string> GetVoices();
 

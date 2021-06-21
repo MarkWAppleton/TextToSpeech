@@ -3,36 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TextToSpeechV3.Model;
+using Windows.Media.Playback;
 using Windows.Media.SpeechSynthesis;
 
 namespace TextToSpeechV3.SpeechManager
 {
 	public class WindowsMediaSpeechSynthesis : ISpeechManager
 	{
+		private Windows.Media.Playback.MediaPlayer _mediaPlayer;
 		private SpeechSynthesizer _synth;
+		private bool _isSpeaking;
 
 		public EnumSpeechEngine EngineType => EnumSpeechEngine.Windows10;
+		public bool IsSpeaking => _isSpeaking;
 
 		public WindowsMediaSpeechSynthesis()
 		{
+			_mediaPlayer = new Windows.Media.Playback.MediaPlayer();
 			_synth = new SpeechSynthesizer();
+			_mediaPlayer.MediaEnded += EndSpeaking;
 		}
 
 		public async Task SpeakText(string text)
 		{
-			Windows.Media.Playback.MediaPlayer mediaPlayer = new Windows.Media.Playback.MediaPlayer();
-			
-			//synth.Voice = SpeechSynthesizer.AllVoices.Where(w => w.DisplayName == voiceName).FirstOrDefault();
-			//_synth.Options.SpeakingRate = speechRate;
 			SpeechSynthesisStream stream = await _synth.SynthesizeTextToStreamAsync(text);
-
-			mediaPlayer.Source = Windows.Media.Core.MediaSource.CreateFromStream(stream, stream.ContentType);
-			mediaPlayer.AutoPlay = true;
+			_mediaPlayer.Source = Windows.Media.Core.MediaSource.CreateFromStream(stream, stream.ContentType);
+			_mediaPlayer.AutoPlay = true;
 		}
 
-		public Task SpeakTextWithSettings(string text, SpeechSettings settings)
+		public void StopSpeaking()
 		{
-			throw new NotImplementedException();
+			if (_isSpeaking)
+			{
+				_mediaPlayer.Pause();
+				_isSpeaking = false;
+			}
 		}
 
 		public IEnumerable<string> GetVoices()
@@ -60,5 +65,11 @@ namespace TextToSpeechV3.SpeechManager
 			SetVoice(settings.Voice);
 			SetRate(settings.Rate);
 		}
+
+		private void EndSpeaking(MediaPlayer sender, object args)
+		{
+			_isSpeaking = false;
+		}
+
 	}
 }

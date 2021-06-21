@@ -13,13 +13,16 @@ namespace TextToSpeechV3.ViewModels
 	{
 		#region PRIVATE PROPERTIES
 		private string _speechTestText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
-		private ISpeechManager _speechManager;
+		ISpeechManager _speechManager;
+
 		#endregion
 
 		#region PUBLIC PROPERTIES
 
-		private ObservableCollection<string> Voices { get{ return new ObservableCollection<string>(_speechManager.GetVoices()); } }
+		private ObservableCollection<string> Voices { get{ return new ObservableCollection<string>(SpeechManagerFactory.CreateSpeechManager(Settings.Engine).GetVoices()); } }
 		public SpeechSettings Settings { get; set; }
+
+		public ObservableCollection<string> Engines { get { return new ObservableCollection<string>(Enum.GetNames(typeof(EnumSpeechEngine))); } }
 
 		#endregion
 
@@ -30,10 +33,10 @@ namespace TextToSpeechV3.ViewModels
 		#endregion
 
 		#region CONSTRUTORS
-		public SettingsViewModel(SpeechSettings settings, ISpeechManager speechManager)
+		public SettingsViewModel(SpeechSettings settings)
 		{
 			Settings = settings.ShallowClone();
-			_speechManager = speechManager;
+
 			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
 		}
 		#endregion
@@ -43,7 +46,9 @@ namespace TextToSpeechV3.ViewModels
 
 		public void SpeechTestButtonCommandMethod(string nothing)
 		{
-			_speechManager.SpeakTextWithSettings(_speechTestText, Settings);
+			_speechManager.StopSpeaking();
+			_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings.Engine);
+			_speechManager.SpeakText(_speechTestText);
 		}
 
 		#endregion

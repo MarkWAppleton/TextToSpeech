@@ -20,10 +20,10 @@ namespace TextToSpeechV3.Views
 	/// </summary>
 	public partial class SettingsView : Window
 	{
-		public SettingsView(SpeechSettings speechSettings, ISpeechManager speechManager)
+		public SettingsView(SpeechSettings speechSettings)
 		{
 			InitializeComponent();
-			DataContext = new SettingsViewModel(speechSettings, speechManager);
+			DataContext = new SettingsViewModel(speechSettings);
 		}
 	}
 }

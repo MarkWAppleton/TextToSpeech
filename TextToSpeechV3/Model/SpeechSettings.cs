@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TextToSpeechV3.SpeechManager;
 
 namespace TextToSpeechV3.Model
 {
@@ -9,6 +10,7 @@ namespace TextToSpeechV3.Model
 		public string Voice { get; set; }
 		public double Rate { get; set; }
 		public double Volume { get; set; }
+		public EnumSpeechEngine Engine { get; set; }
 
 		public SpeechSettings ShallowClone()
 		{

@@ -16,6 +16,7 @@ namespace TextToSpeechV3.SpeechManager
 		private CancellationTokenSource _cancellationTokenSource;
 
 		public EnumSpeechEngine EngineType => EnumSpeechEngine.Legacy;
+		public bool IsSpeaking => _isSpeaking;
 
 		public SAPI()
 		{
@@ -43,8 +44,7 @@ namespace TextToSpeechV3.SpeechManager
 		{
 			if (_isSpeaking)
 			{
-				_spVoice.Skip("Sentence", int.MaxValue);
-				_isSpeaking = false;
+				StopSpeaking();
 			}
 			else
 			{
@@ -52,6 +52,14 @@ namespace TextToSpeechV3.SpeechManager
 				int queueID = _spVoice.Speak(text, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
 			}
 			return null;
+		}
+		public void StopSpeaking()
+		{
+			if (_isSpeaking)
+			{
+				_spVoice.Skip("Sentence", int.MaxValue);
+				_isSpeaking = false;
+			}
 		}
 
 		public void SetVoice(string name)
