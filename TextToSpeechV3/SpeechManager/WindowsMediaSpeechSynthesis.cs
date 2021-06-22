@@ -26,6 +26,7 @@ namespace TextToSpeechV3.SpeechManager
 
 		public async Task SpeakText(string text)
 		{
+			_isSpeaking = true;
 			SpeechSynthesisStream stream = await _synth.SynthesizeTextToStreamAsync(text);
 			_mediaPlayer.Source = Windows.Media.Core.MediaSource.CreateFromStream(stream, stream.ContentType);
 			_mediaPlayer.AutoPlay = true;
