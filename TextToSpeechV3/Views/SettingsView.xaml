@@ -35,18 +35,22 @@
 			<TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding Settings.Rate}"/>
 
 			<TextBlock Grid.Row="2" Grid.Column="0" Text="Engine: "/>
-			<ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Engines}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Settings.Engine}" />
+			<ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Engines}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SelectedEngine}" />
 
 			<TextBlock Grid.Row="3" Grid.Column="0" Text="Voice: "/>
-			<ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Voices}" SelectedItem="{Binding Settings.Voice}" />
+			<ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Voices}" SelectedItem="{Binding Settings.Voice, Mode=TwoWay}" IsSynchronizedWithCurrentItem="True" />
 			<Button Grid.Row="3" Grid.Column="2" Content="Start/Stop voice test" Command="{Binding Path=SpeechTestButtonCommand}"/>
 
 		</Grid>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
-			
+			<Button Grid.Column="1" Content="Exit" Command="{Binding ExitButtonCommand}"></Button>
+			<Button Grid.Column="2" Content="Save" Command="{Binding SaveButtonCommand}"></Button>
 		</Grid>
 	</Grid>
 </Window>

@@ -23,7 +23,12 @@ namespace TextToSpeechV3.Views
 		public SettingsView(SpeechSettings speechSettings)
 		{
 			InitializeComponent();
-			DataContext = new SettingsViewModel(speechSettings);
+			SettingsViewModel  vm = new SettingsViewModel(speechSettings);
+			DataContext = vm;
+			if(vm.CloseAction == null)
+			{
+				vm.CloseAction = new Action(this.Close);
+			}
 		}
 	}
 }
