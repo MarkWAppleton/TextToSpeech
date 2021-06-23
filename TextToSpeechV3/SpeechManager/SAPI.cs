@@ -74,15 +74,15 @@ namespace TextToSpeechV3.SpeechManager
 					_spVoice.Voice = voice;
 					return;
 				}
-
 			}
+			_spVoice.Voice = voices.Item(0);
 		}
 		public void SetRate(double rate)
 		{
 			_spVoice.Rate = ConvertDoubleToInt(rate);
 		}
 
-		public void setVolume(double volume)
+		public void SetVolume(double volume)
 		{
 			_spVoice.Volume = ConvertDoubleToInt(volume) * 100;
 		}
@@ -111,11 +111,11 @@ namespace TextToSpeechV3.SpeechManager
 			_isSpeaking = false;
 		}
 
-		public void setAllSettings(SpeechSettings settings)
+		public void SetAllSettings(SpeechSettings settings)
 		{
 			SetVoice(settings.Voice);
 			SetRate(settings.Rate);
-			setVolume(settings.Volume);
+			SetVolume(settings.Volume);
 		}
 
 	}

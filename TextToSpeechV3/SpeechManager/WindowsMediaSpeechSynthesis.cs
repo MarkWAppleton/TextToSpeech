@@ -48,7 +48,15 @@ namespace TextToSpeechV3.SpeechManager
 
 		public void SetVoice(string name)
 		{
-			_synth.Voice = SpeechSynthesizer.AllVoices.Where(w => w.DisplayName == name).FirstOrDefault();
+			VoiceInformation selectedVoice = SpeechSynthesizer.AllVoices.Where(w => w.DisplayName == name).FirstOrDefault();
+			if(selectedVoice == null)
+			{
+				_synth.Voice = SpeechSynthesizer.AllVoices.FirstOrDefault();
+			}
+			else
+			{
+				_synth.Voice = selectedVoice;
+			}
 		}
 
 		public void SetRate(double rate)
@@ -56,12 +64,12 @@ namespace TextToSpeechV3.SpeechManager
 			_synth.Options.SpeakingRate = rate;
 		}
 
-		public void setVolume(double volume)
+		public void SetVolume(double volume)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void setAllSettings(SpeechSettings settings)
+		public void SetAllSettings(SpeechSettings settings)
 		{
 			SetVoice(settings.Voice);
 			SetRate(settings.Rate);

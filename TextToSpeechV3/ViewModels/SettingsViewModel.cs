@@ -73,7 +73,7 @@ namespace TextToSpeechV3.ViewModels
 			else
 			{
 				_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings.Engine);
-				_speechManager.setAllSettings(Settings);
+				_speechManager.SetAllSettings(Settings);
 				_speechManager.SpeakText(_speechTestText);
 			}
 		}
@@ -85,8 +85,9 @@ namespace TextToSpeechV3.ViewModels
 
 		public void SaveButtonCommandMethod(string nothing)
 		{
-			//string jsonSettings = JsonSerializer.Serialize(Settings);
-			//SpeechSettings test = JsonSerializer.Deserialize<SpeechSettings>(jsonSettings);
+			Properties.Settings.Default.SpeechSettings = JsonSerializer.Serialize(Settings);
+			Properties.Settings.Default.Save();
+			CloseAction();
 		}
 
 		#endregion

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Input;
 using TextToSpeechV3.Hotkeys;
 using TextToSpeechV3.Model;
@@ -25,7 +26,7 @@ namespace TextToSpeechV3.ViewModels
 		#region PUBLIC PROPERTIES
 
 		public ObservableCollection<string> Voices { get; set; }
-		public SpeechSettings Settings { get; set; }
+		public SpeechSettings settings { get; set; }
 		public string SelectedText { get; set; }
 
 		#endregion
@@ -43,13 +44,23 @@ namespace TextToSpeechV3.ViewModels
 		#region CONSTRUTORS
 		public MainWindowViewModel(MainWindow mainWindow)
 		{
-			_speechManager = new SAPI();
+			string speechSettingsJson = Properties.Settings.Default.SpeechSettings;
+			if (string.IsNullOrWhiteSpace(speechSettingsJson))
+			{
+				settings = new SpeechSettings();
+				settings.Rate = 1.6;
+				settings.Volume = 1;
+				settings.Voice = "";
+				settings.Engine = EnumSpeechEngine.Legacy;
+			}
+			else
+			{
+				settings = JsonSerializer.Deserialize<SpeechSettings>(speechSettingsJson);
+			}
+			
+			_speechManager = SpeechManagerFactory.CreateSpeechManager(settings);
 			Voices = new ObservableCollection<string>(_speechManager.GetVoices());
-			Settings = new SpeechSettings();
-			Settings.Rate = 1.6;
-			Settings.Volume = 1;
-			Settings.Voice = _speechManager.GetVoices().ToList()[0];
-			Settings.Engine = EnumSpeechEngine.Legacy;
+
 			SelectedText = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
@@ -72,13 +83,13 @@ namespace TextToSpeechV3.ViewModels
 		public void SpeechTestButtonCommandMethod(string text)
 		{
 
-			_speechManager.setAllSettings(Settings);
+			_speechManager.SetAllSettings(settings);
 			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
 		}
 		
 		public void SettingsButtonCommandMethod(object nothing)
 		{
-			new SettingsView(Settings).Show();
+			new SettingsView(settings).Show();
 		}
 
 		#endregion

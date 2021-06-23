@@ -20,8 +20,8 @@ namespace TextToSpeechV3.SpeechManager
 
 		void SetRate(double rate);
 
-		void setVolume(double volume);
+		void SetVolume(double volume);
 
-		void setAllSettings(SpeechSettings settings);
+		void SetAllSettings(SpeechSettings settings);
 	}
 }

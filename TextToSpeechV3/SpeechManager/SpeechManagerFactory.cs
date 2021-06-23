@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TextToSpeechV3.Model;
 
 namespace TextToSpeechV3.SpeechManager
 {
@@ -17,6 +18,23 @@ namespace TextToSpeechV3.SpeechManager
 				default:
 					return null;
 			}
+		}
+		public static ISpeechManager CreateSpeechManager(SpeechSettings settings)
+		{
+			ISpeechManager sm = null;
+			switch (settings.Engine)
+			{
+				case EnumSpeechEngine.Legacy:
+					sm = new SAPI();
+					break;
+				case EnumSpeechEngine.Windows10:
+					sm = new WindowsMediaSpeechSynthesis();
+					break;
+				default:
+					return null;
+			}
+			sm.SetAllSettings(settings);
+			return sm;
 		}
 	}
 }
