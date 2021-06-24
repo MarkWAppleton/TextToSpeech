@@ -31,39 +31,6 @@ namespace TextToSpeechV3.Views
 		{
 			InitializeComponent();
 			this.DataContext = new MainWindowViewModel(this);
-			//speechManager = new WindowsMediaSpeechSynthesis();
-			//_speechManager = new SAPI();
-			//lbVoices.ItemsSource = _speechManager.GetVoices();
-			//lbVoices.SelectedIndex = 0;
 		}
-
-		//private async void Button_Click(object sender, RoutedEventArgs e)
-		//{
-		//	_speechManager.SetRate(Double.Parse(txtSpeechRate.Text));
-		//	_speechManager.PlayAudio(textBox.Text, null, 0);
-		//	//await speechManager.PlayAudio(textBox.Text,lbVoices.SelectedItem.ToString(), Double.Parse(txtSpeechRate.Text));
-		//}
-
-		//private void Button_Click_1(object sender, RoutedEventArgs e)
-		//{
-		//	IHotKeyRegister hotKeyRegister = new HotKeyRegister(this, Key.NumPad9, Modifiers.Control);
-
-		//	hotKeyRegister.HotkeyTriggered += SpeakTextHotkeyPressed;
-		//	//System.GC.Collect();
-		//}
-
-		//private void SpeakTextHotkeyPressed(object sender, EventArgs e)
-		//{
-		//	SendKeys.SendWait("^(c)");
-		//	Thread.Sleep(80);//TODO make this configurable
-		//	string copiedText = System.Windows.Clipboard.GetText();
-		//	txtCopyResults.Text = copiedText;
-		//	_speechManager.PlayAudio(copiedText, lbVoices.SelectedItem.ToString(), Double.Parse(txtSpeechRate.Text));
-		//}
-
-		//private void lbVoices_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		//{
-		//	_speechManager.SetVoice(lbVoices.SelectedItem.ToString());
-		//}
 	}
 }

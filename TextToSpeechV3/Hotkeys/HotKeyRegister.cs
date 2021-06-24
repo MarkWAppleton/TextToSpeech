@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using TextToSpeechV3.Model;
 
 namespace TextToSpeechV3.Hotkeys
 {
@@ -14,12 +15,12 @@ namespace TextToSpeechV3.Hotkeys
 
 		private readonly int _id;
 
-		public HotKeyRegister(Window window, Key key, Modifiers modifier)
+		public HotKeyRegister(Window window, Hotkey hotkey)
 		{
 			IntPtr hWnd = new WindowInteropHelper(window).Handle;
-			uint uintKey = (uint)KeyInterop.VirtualKeyFromKey(key);
+			uint uintKey = (uint)KeyInterop.VirtualKeyFromKey(hotkey.Key);
 			_id = GetHashCode();
-			RegisterHotKey(hWnd, _id, (uint)modifier, uintKey);
+			RegisterHotKey(hWnd, _id, (uint)hotkey.Modifier, uintKey);
 			ComponentDispatcher.ThreadPreprocessMessage += ThreadPreprocessMessageMethod;
 		}
 

@@ -7,12 +7,12 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 	<StackPanel>
-		<TextBox Name="textBox" Text="{Binding SelectedText, Mode=TwoWay}"/>
+		<!--<TextBox Name="textBox" Text="{Binding SelectedText, Mode=TwoWay}"/>
 		<Button Content="Button" Command="{Binding Path=SpeechTestButtonCommand}" CommandParameter="{Binding ElementName=textBox,Path=Text}" />
 		<TextBox x:Name="txtSpeechRate" Text="{Binding Settings.Rate, Mode=TwoWay}"/>
 		<ListBox x:Name="lbVoices" ItemsSource="{Binding Voices}" SelectedItem="{Binding Settings.Voice}"></ListBox>
 		<TextBox x:Name="txtResult" IsReadOnly="True"/>
-		<TextBlock x:Name="txtCopyResults"/>
+		<TextBlock x:Name="txtCopyResults"/>-->
 		<Button Content="Settings" Command="{Binding Path=SettingsButtonCommand}"/>
 	</StackPanel>
 </Window>

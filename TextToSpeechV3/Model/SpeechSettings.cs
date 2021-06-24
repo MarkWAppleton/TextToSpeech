@@ -12,6 +12,8 @@ namespace TextToSpeechV3.Model
 		public double Volume { get; set; }
 		public EnumSpeechEngine Engine { get; set; }
 
+		public Dictionary<string, Hotkey> Hotkeys { get; set; }
+
 		public SpeechSettings ShallowClone()
 		{
 			return (SpeechSettings)this.MemberwiseClone();

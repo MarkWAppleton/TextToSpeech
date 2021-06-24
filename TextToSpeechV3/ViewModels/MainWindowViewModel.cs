@@ -21,13 +21,13 @@ namespace TextToSpeechV3.ViewModels
 		private ISpeechManager _speechManager;
 		private IHotKeyRegister _speakHotKey;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
+		private Dictionary<string, IHotKeyRegister> _activeHotkeys;
+		private MainWindow _mainWindow;
 		#endregion
 
 		#region PUBLIC PROPERTIES
 
-		public ObservableCollection<string> Voices { get; set; }
-		public SpeechSettings settings { get; set; }
-		public string SelectedText { get; set; }
+		public SpeechSettings Settings { get; set; }
 
 		#endregion
 
@@ -44,28 +44,28 @@ namespace TextToSpeechV3.ViewModels
 		#region CONSTRUTORS
 		public MainWindowViewModel(MainWindow mainWindow)
 		{
+			_mainWindow = mainWindow;
 			string speechSettingsJson = Properties.Settings.Default.SpeechSettings;
 			if (string.IsNullOrWhiteSpace(speechSettingsJson))
 			{
-				settings = new SpeechSettings();
-				settings.Rate = 1.6;
-				settings.Volume = 1;
-				settings.Voice = "";
-				settings.Engine = EnumSpeechEngine.Legacy;
+				Settings = new SpeechSettings();
+				Settings.Rate = 1.6;
+				Settings.Volume = 1;
+				Settings.Voice = "";
+				Settings.Engine = EnumSpeechEngine.Legacy;
 			}
 			else
 			{
-				settings = JsonSerializer.Deserialize<SpeechSettings>(speechSettingsJson);
+				Settings = JsonSerializer.Deserialize<SpeechSettings>(speechSettingsJson);
 			}
 			
-			_speechManager = SpeechManagerFactory.CreateSpeechManager(settings);
-			Voices = new ObservableCollection<string>(_speechManager.GetVoices());
+			_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings);
 
-			SelectedText = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+			//SelectedText = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
 
-			_speakHotKey = new HotKeyRegister(mainWindow, Key.NumPad9, Modifiers.Control);
+			_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
 			_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
 		}
 
@@ -75,26 +75,51 @@ namespace TextToSpeechV3.ViewModels
 
 		#region PUBLIC METHODS
 
-		private void SpeakHotKeyMethod(object sender, EventArgs e)
+		public void SpeakHotKeyMethod(object sender, EventArgs e)
 		{
 			string text = _copyTextFromScreenService.GetTextFromScreen();
 			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
 		}
+
 		public void SpeechTestButtonCommandMethod(string text)
 		{
 
-			_speechManager.SetAllSettings(settings);
+			_speechManager.SetAllSettings(Settings);
 			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
 		}
 		
 		public void SettingsButtonCommandMethod(object nothing)
 		{
-			new SettingsView(settings).Show();
+			new SettingsView(Settings).Show();
 		}
 
 		#endregion
 
 		#region PRIVATE METHODS
+
+		private void AddSupportedHotkeys(SpeechSettings settings)
+		{
+			CheckAndAddHotKey(settings, "Speak", new Hotkey(Key.NumPad9, Modifiers.Control));
+		}
+
+		private void CheckAndAddHotKey(SpeechSettings settings, string name, Hotkey hotkey)
+		{
+			if (!settings.Hotkeys.ContainsKey(name))
+			{
+				settings.Hotkeys.Add(name, hotkey);
+			}
+		}
+
+		private void ActivateHotkeys()
+		{
+			string name = "Speak";
+			Hotkey hotkey = Settings.Hotkeys[name];
+
+			IHotKeyRegister hotKeyRegister = new HotKeyRegister(_mainWindow, hotkey);
+			hotKeyRegister.HotkeyTriggered += SpeakHotKeyMethod;
+			_activeHotkeys.Add(name, hotKeyRegister);
+
+		}
 
 		#endregion
 
