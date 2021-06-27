@@ -8,10 +8,14 @@ namespace TextToSpeechV3.Model
 {
 	public class Hotkey
 	{
-		public Key Key { get; private set; }
-		public Modifiers Modifier { get; private set; }
+		public Keys Key { get; set; }
+		public Modifiers Modifier { get; set; }
 
-		public Hotkey(Key key, Modifiers modifier)
+		public Hotkey()
+		{
+
+		}
+		public Hotkey(Keys key, Modifiers modifier)
 		{
 			Key = key;
 			Modifier = modifier;

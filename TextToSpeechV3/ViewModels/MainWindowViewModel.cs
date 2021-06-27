@@ -21,7 +21,7 @@ namespace TextToSpeechV3.ViewModels
 		private ISpeechManager _speechManager;
 		private IHotKeyRegister _speakHotKey;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
-		private Dictionary<string, IHotKeyRegister> _activeHotkeys;
+		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();
 		private MainWindow _mainWindow;
 		#endregion
 
@@ -46,6 +46,7 @@ namespace TextToSpeechV3.ViewModels
 		{
 			_mainWindow = mainWindow;
 			string speechSettingsJson = Properties.Settings.Default.SpeechSettings;
+			speechSettingsJson = "";
 			if (string.IsNullOrWhiteSpace(speechSettingsJson))
 			{
 				Settings = new SpeechSettings();
@@ -61,12 +62,24 @@ namespace TextToSpeechV3.ViewModels
 			
 			_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings);
 
+			AddSupportedHotkeys(Settings);
+			RegisterHotkeys();
+
 			//SelectedText = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
+			//_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
 
-			_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
-			_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
+			//_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
+			//_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
+
+			//List<KeyValuePair<int, int>> test = new List<KeyValuePair<int, int>>();
+			//test.Add(new KeyValuePair<int, int>(1,2));
+			//string json = JsonSerializer.Serialize(test);
+			Dictionary<string, int> test = new Dictionary<string, int>();
+			test.Add("1", 2);
+			string json = JsonSerializer.Serialize(test);
+			int x = 1;
+
 		}
 
 		#endregion
@@ -84,13 +97,22 @@ namespace TextToSpeechV3.ViewModels
 		public void SpeechTestButtonCommandMethod(string text)
 		{
 
-			_speechManager.SetAllSettings(Settings);
 			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
 		}
 		
 		public void SettingsButtonCommandMethod(object nothing)
 		{
-			new SettingsView(Settings).Show();
+			SettingsView settingsView = new SettingsView(Settings);
+			settingsView.ShowDialog();
+			if(settingsView.SpeechSettings == null)
+			{
+				return;
+			}
+			Settings = settingsView.SpeechSettings;
+
+			UnregisterHotkeys();
+			_speechManager.SetAllSettings(Settings);
+			RegisterHotkeys();
 		}
 
 		#endregion
@@ -99,25 +121,32 @@ namespace TextToSpeechV3.ViewModels
 
 		private void AddSupportedHotkeys(SpeechSettings settings)
 		{
-			CheckAndAddHotKey(settings, "Speak", new Hotkey(Key.NumPad9, Modifiers.Control));
+			CheckAndAddHotKey(settings, EnumFeature.Speak, new Hotkey(Keys.NumPad9, Modifiers.Control));
 		}
 
-		private void CheckAndAddHotKey(SpeechSettings settings, string name, Hotkey hotkey)
+		private void CheckAndAddHotKey(SpeechSettings settings, EnumFeature feature, Hotkey hotkey)
 		{
-			if (!settings.Hotkeys.ContainsKey(name))
+			if (!settings.Hotkeys.ContainsKey(feature))
 			{
-				settings.Hotkeys.Add(name, hotkey);
+				settings.Hotkeys.Add(feature, hotkey);
 			}
 		}
 
-		private void ActivateHotkeys()
+		private void RegisterHotkeys()
 		{
-			string name = "Speak";
-			Hotkey hotkey = Settings.Hotkeys[name];
 
-			IHotKeyRegister hotKeyRegister = new HotKeyRegister(_mainWindow, hotkey);
-			hotKeyRegister.HotkeyTriggered += SpeakHotKeyMethod;
-			_activeHotkeys.Add(name, hotKeyRegister);
+			Hotkey hotkey = Settings.Hotkeys[(int)EnumFeature.Speak];
+			IHotKeyRegister speakHotkey = new HotKeyRegister(_mainWindow, hotkey);
+			speakHotkey.HotkeyTriggered += SpeakHotKeyMethod;
+			_activeHotkeys.Add(EnumFeature.Speak, speakHotkey);
+
+		}
+
+		private void UnregisterHotkeys()
+		{
+			IHotKeyRegister speakHotkey = _activeHotkeys[EnumFeature.Speak];
+			speakHotkey.HotkeyTriggered -= SpeakHotKeyMethod;
+			_activeHotkeys.Remove(EnumFeature.Speak);
 
 		}
 

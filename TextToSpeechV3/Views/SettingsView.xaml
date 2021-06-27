@@ -23,6 +23,11 @@
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 
@@ -40,6 +45,30 @@
 			<TextBlock Grid.Row="3" Grid.Column="0" Text="Voice: "/>
 			<ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Voices}" SelectedItem="{Binding Settings.Voice, Mode=TwoWay}" IsSynchronizedWithCurrentItem="True" />
 			<Button Grid.Row="3" Grid.Column="2" Content="Start/Stop voice test" Command="{Binding Path=SpeechTestButtonCommand}"/>
+
+			
+			<Grid Grid.Row="4" Grid.ColumnSpan="3">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Speak Hotkey: "/>
+				<ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Modifiers}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SpeakModifier}"/>
+				<ComboBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SpeakKey}"/>
+
+				<TextBlock Grid.Row="1" Grid.Column="0" Text="Instanct Screenshot Hotkey: "/>
+				<ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Modifiers}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+				<ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+			</Grid>
 
 		</Grid>
 		<Grid Grid.Row="1">

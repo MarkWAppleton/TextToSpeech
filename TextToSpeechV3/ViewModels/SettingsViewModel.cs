@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using TextToSpeechV3.Model;
 using TextToSpeechV3.SpeechManager;
 using TextToSpeechV3.Utility;
 using System.Text.Json;
+using TextToSpeechV3.Views;
+using TextToSpeechV3.Hotkeys;
 
 namespace TextToSpeechV3.ViewModels
 {
@@ -15,14 +16,14 @@ namespace TextToSpeechV3.ViewModels
 		#region PRIVATE PROPERTIES
 		private string _speechTestText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 		private ISpeechManager _speechManager;
+		private SettingsView _view;
 		#endregion
 
 		#region PUBLIC PROPERTIES
 
 		public Action CloseAction { get; set; }
 
-		public ObservableCollection<string> Voices { get{ return new ObservableCollection<string>(SpeechManagerFactory.CreateSpeechManager(Settings.Engine).GetVoices()); } }
-		public Collection<string> VoicesCollection;
+		public ObservableCollection<string> Voices { get { return new ObservableCollection<string>(SpeechManagerFactory.CreateSpeechManager(Settings.Engine).GetVoices()); } }
 		public SpeechSettings Settings { get; set; }
 		public Dictionary<EnumSpeechEngine, string> Engines { get { return EnumExtensions<EnumSpeechEngine>.ToDictionary(); } }
 
@@ -39,6 +40,35 @@ namespace TextToSpeechV3.ViewModels
 				OnPropertyChanged(nameof(Voices));
 			}
 		}
+
+		public Dictionary<Modifiers, string> Modifiers { get { return EnumExtensions<Modifiers>.ToDictionary(); } }
+		public Dictionary<Keys, string> Keys { get { return EnumExtensions<Keys>.ToDictionary(); } }
+
+		public Modifiers SpeakModifier 
+		{ 
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.Speak].Modifier;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.Speak].Modifier = value;
+			}
+		}
+
+		public Keys SpeakKey
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.Speak].Key;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.Speak].Key = value;
+			}
+		}
+
+
 		#endregion
 
 		#region COMMANDS
@@ -52,8 +82,9 @@ namespace TextToSpeechV3.ViewModels
 		#endregion
 
 		#region CONSTRUTORS
-		public SettingsViewModel(SpeechSettings settings)
+		public SettingsViewModel(SettingsView view, SpeechSettings settings)
 		{
+			_view = view;
 			Settings = settings.ShallowClone();
 			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
 			_exitButtonCommand = new RelayCommand<string>(ExitButtonCommandMethod);
@@ -87,6 +118,7 @@ namespace TextToSpeechV3.ViewModels
 		{
 			Properties.Settings.Default.SpeechSettings = JsonSerializer.Serialize(Settings);
 			Properties.Settings.Default.Save();
+			_view.SpeechSettings = Settings.ShallowClone();
 			CloseAction();
 		}
 

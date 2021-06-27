@@ -17,7 +17,10 @@ namespace TextToSpeechV3.Utility
 
 			foreach(object x in Enum.GetValues(typeof(T)))
 			{
-				result.Add((T)x, x.ToString());
+				if (!result.ContainsKey((T)x))
+				{
+					result.Add((T)x, x.ToString());
+				}
 			}
 
 			return result;
