@@ -75,9 +75,11 @@ namespace TextToSpeechV3.ViewModels
 			//List<KeyValuePair<int, int>> test = new List<KeyValuePair<int, int>>();
 			//test.Add(new KeyValuePair<int, int>(1,2));
 			//string json = JsonSerializer.Serialize(test);
-			Dictionary<string, int> test = new Dictionary<string, int>();
-			test.Add("1", 2);
+			Dictionary<int, int> test = new Dictionary<int, int>();
+			test.Add(1, 2);
 			string json = JsonSerializer.Serialize(test);
+			Dictionary<int, int> test2 = new Dictionary<int, int>();
+			test2 = JsonSerializer.Deserialize<Dictionary<int, int>>(json);
 			int x = 1;
 
 		}
