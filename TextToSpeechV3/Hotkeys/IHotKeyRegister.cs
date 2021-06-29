@@ -7,5 +7,7 @@ namespace TextToSpeechV3.Hotkeys
 	public interface IHotKeyRegister
 	{
 		event EventHandler HotkeyTriggered;
+
+		void UnregisterHotkey();
 	}
 }

@@ -77,9 +77,11 @@
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
+				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
-			<Button Grid.Column="1" Content="Exit" Command="{Binding ExitButtonCommand}"></Button>
-			<Button Grid.Column="2" Content="Save" Command="{Binding SaveButtonCommand}"></Button>
+			<Button Grid.Column="1" Content="OK" Command="{Binding OkButtonCommand}" Margin="5"/>
+			<Button Grid.Column="2" Content="Cancel" Command="{Binding CancelButtonCommand}" Margin="5"/>
+			<Button Grid.Column="3" Content="Apply" Command="{Binding SaveButtonCommand}" Margin="5"/>
 		</Grid>
 	</Grid>
 </Window>

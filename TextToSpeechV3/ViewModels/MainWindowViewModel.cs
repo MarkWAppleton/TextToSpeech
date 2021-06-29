@@ -46,7 +46,6 @@ namespace TextToSpeechV3.ViewModels
 		{
 			_mainWindow = mainWindow;
 			string speechSettingsJson = Properties.Settings.Default.SpeechSettings;
-			speechSettingsJson = "";
 			if (string.IsNullOrWhiteSpace(speechSettingsJson))
 			{
 				Settings = new SpeechSettings();
@@ -65,23 +64,10 @@ namespace TextToSpeechV3.ViewModels
 			AddSupportedHotkeys(Settings);
 			RegisterHotkeys();
 
-			//SelectedText = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-			//_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
 
 			//_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
 			//_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
-
-			//List<KeyValuePair<int, int>> test = new List<KeyValuePair<int, int>>();
-			//test.Add(new KeyValuePair<int, int>(1,2));
-			//string json = JsonSerializer.Serialize(test);
-			Dictionary<int, int> test = new Dictionary<int, int>();
-			test.Add(1, 2);
-			string json = JsonSerializer.Serialize(test);
-			Dictionary<int, int> test2 = new Dictionary<int, int>();
-			test2 = JsonSerializer.Deserialize<Dictionary<int, int>>(json);
-			int x = 1;
-
 		}
 
 		#endregion
@@ -93,12 +79,6 @@ namespace TextToSpeechV3.ViewModels
 		public void SpeakHotKeyMethod(object sender, EventArgs e)
 		{
 			string text = _copyTextFromScreenService.GetTextFromScreen();
-			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
-		}
-
-		public void SpeechTestButtonCommandMethod(string text)
-		{
-
 			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
 		}
 		
@@ -147,6 +127,7 @@ namespace TextToSpeechV3.ViewModels
 		private void UnregisterHotkeys()
 		{
 			IHotKeyRegister speakHotkey = _activeHotkeys[EnumFeature.Speak];
+			speakHotkey.UnregisterHotkey();
 			speakHotkey.HotkeyTriggered -= SpeakHotKeyMethod;
 			_activeHotkeys.Remove(EnumFeature.Speak);
 

@@ -13,15 +13,21 @@ namespace TextToSpeechV3.Hotkeys
 	{
 		public event EventHandler HotkeyTriggered;
 
+		private readonly IntPtr _hWnd;
 		private readonly int _id;
 
 		public HotKeyRegister(Window window, Hotkey hotkey)
 		{
-			IntPtr hWnd = new WindowInteropHelper(window).Handle;
+			_hWnd = new WindowInteropHelper(window).Handle;
 			uint uintKey = (uint)KeyInterop.VirtualKeyFromKey((Key)hotkey.Key);
 			_id = GetHashCode();
-			RegisterHotKey(hWnd, _id, (uint)hotkey.Modifier, uintKey);
+			RegisterHotKey(_hWnd, _id, (uint)hotkey.Modifier, uintKey);
 			ComponentDispatcher.ThreadPreprocessMessage += ThreadPreprocessMessageMethod;
+		}
+
+		public void UnregisterHotkey()
+		{
+			UnregisterHotKey(_hWnd, _id);
 		}
 
 		private void ThreadPreprocessMessageMethod(ref MSG msg, ref bool handled)

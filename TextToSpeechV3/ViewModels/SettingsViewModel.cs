@@ -74,11 +74,13 @@ namespace TextToSpeechV3.ViewModels
 		#region COMMANDS
 
 		private RelayCommand<string> _speechTestButtonCommand;
-		private RelayCommand<string> _exitButtonCommand;
-		private RelayCommand<string> _saveButtonCommand;
+		private RelayCommand<string> _cancelButtonCommand;
+		private RelayCommand<string> _okButtonCommand;
+		private RelayCommand<string> _applyButtonCommand;
 		public RelayCommand<string> SpeechTestButtonCommand { get { return _speechTestButtonCommand; } }
-		public RelayCommand<string> ExitButtonCommand { get { return _exitButtonCommand; } }
-		public RelayCommand<string> SaveButtonCommand { get { return _saveButtonCommand; } }
+		public RelayCommand<string> CancelButtonCommand { get { return _cancelButtonCommand; } }
+		public RelayCommand<string> OkButtonCommand { get { return _okButtonCommand; } }
+		public RelayCommand<string> ApplyButtonCommand { get { return _applyButtonCommand; } }
 		#endregion
 
 		#region CONSTRUTORS
@@ -87,8 +89,9 @@ namespace TextToSpeechV3.ViewModels
 			_view = view;
 			Settings = settings.ShallowClone();
 			_speechTestButtonCommand = new RelayCommand<string>(SpeechTestButtonCommandMethod);
-			_exitButtonCommand = new RelayCommand<string>(ExitButtonCommandMethod);
-			_saveButtonCommand = new RelayCommand<string>(SaveButtonCommandMethod);
+			_cancelButtonCommand = new RelayCommand<string>(CancelButtonCommandMethod);
+			_okButtonCommand = new RelayCommand<string>(OkButtonCommandMethod);
+			_applyButtonCommand = new RelayCommand<string>(ApplyButtonCommandMethod);
 		}
 		#endregion
 
@@ -109,17 +112,24 @@ namespace TextToSpeechV3.ViewModels
 			}
 		}
 
-		public void ExitButtonCommandMethod(string nothing)
+		public void CancelButtonCommandMethod(string nothing)
 		{
 			CloseAction();
 		}
 
-		public void SaveButtonCommandMethod(string nothing)
+		public void OkButtonCommandMethod(string nothing)
 		{
 			Properties.Settings.Default.SpeechSettings = JsonSerializer.Serialize(Settings);
 			Properties.Settings.Default.Save();
 			_view.SpeechSettings = Settings.ShallowClone();
 			CloseAction();
+		}
+
+		public void ApplyButtonCommandMethod(string nothing)
+		{
+			Properties.Settings.Default.SpeechSettings = JsonSerializer.Serialize(Settings);
+			Properties.Settings.Default.Save();
+			_view.SpeechSettings = Settings.ShallowClone();
 		}
 
 		#endregion
