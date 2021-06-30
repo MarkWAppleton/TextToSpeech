@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TextToSpeechV3.Hotkeys;
 using TextToSpeechV3.Model;
 using TextToSpeechV3.Services;
+using TextToSpeechV3.Services.Interfaces;
 using TextToSpeechV3.SpeechManager;
 using TextToSpeechV3.Utility;
 using TextToSpeechV3.Views;
@@ -34,10 +35,13 @@ namespace TextToSpeechV3.ViewModels
 		#region COMMANDS
 
 		private RelayCommand<string> _speechTestButtonCommand;
-		public RelayCommand<string> SpeechTestButtonCommand { get { return _speechTestButtonCommand; } }
 
 		private RelayCommand<object> _settingsButtonCommand;
+
+		private RelayCommand<object> _snippingButtonCommand;
+		public RelayCommand<string> SpeechTestButtonCommand { get { return _speechTestButtonCommand; } }
 		public RelayCommand<object> SettingsButtonCommand { get { return _settingsButtonCommand; } }
+		public RelayCommand<object> SnippingButtonCommand { get { return _snippingButtonCommand; } }
 
 		#endregion
 
@@ -65,6 +69,7 @@ namespace TextToSpeechV3.ViewModels
 			RegisterHotkeys();
 
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
+			_snippingButtonCommand = new RelayCommand<object>(SnippingButtonCommandMethod);
 
 			//_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
 			//_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
@@ -82,6 +87,11 @@ namespace TextToSpeechV3.ViewModels
 			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
 		}
 		
+		public void InstantScreenshotHotkeyMethod(object sender, EventArgs e)
+		{
+
+		}
+
 		public void SettingsButtonCommandMethod(object nothing)
 		{
 			SettingsView settingsView = new SettingsView(Settings);
@@ -95,6 +105,12 @@ namespace TextToSpeechV3.ViewModels
 			UnregisterHotkeys();
 			_speechManager.SetAllSettings(Settings);
 			RegisterHotkeys();
+		}
+
+		public void SnippingButtonCommandMethod(object nothing)
+		{
+			SnippingTool snippingTool = new SnippingTool();
+			snippingTool.ShowDialog();
 		}
 
 		#endregion

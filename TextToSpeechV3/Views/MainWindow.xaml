@@ -14,5 +14,6 @@
 		<TextBox x:Name="txtResult" IsReadOnly="True"/>
 		<TextBlock x:Name="txtCopyResults"/>-->
 		<Button Content="Settings" Command="{Binding Path=SettingsButtonCommand}"/>
+		<Button Content="Snipping" Command="{Binding Path=SnippingButtonCommand}"/>
 	</StackPanel>
 </Window>

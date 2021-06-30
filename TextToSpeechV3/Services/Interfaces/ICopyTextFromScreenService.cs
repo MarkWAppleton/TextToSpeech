@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TextToSpeechV3.Services
+namespace TextToSpeechV3.Services.Interfaces
 {
 	public interface ICopyTextFromScreenService
 	{
