@@ -20,10 +20,18 @@ namespace TextToSpeechV3.Views
 	/// </summary>
 	public partial class SnippingTool : Window
 	{
+		private SnippingToolViewModel _vm;
+
 		public SnippingTool()
 		{
 			InitializeComponent();
-			this.DataContext = new SnippingToolViewModel();
+			_vm = new SnippingToolViewModel(this);
+			this.DataContext = _vm;
+		}
+
+		private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			_vm.MouseDownCommandMethod(e.GetPosition(this));
 		}
 	}
 }
