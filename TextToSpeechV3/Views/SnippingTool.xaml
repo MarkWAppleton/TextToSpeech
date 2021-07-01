@@ -6,16 +6,11 @@
         xmlns:local="clr-namespace:TextToSpeechV3.Views"
 		xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="SnippingTool" Height="600" Width="600" Left="{Binding ScreenPosition.X}" Top="{Binding ScreenPosition.Y}"
-		WindowState="Normal" Topmost="True"><!--AllowsTransparency="True" Opacity="0.5" WindowStyle="SingleBorderWindow"-->
+        Title="SnippingTool" Height="600" Width="600" AllowsTransparency="True" Opacity="0.5" WindowStyle="None"
+		WindowState="Normal" Topmost="True" KeyUp="Window_KeyUp">
 	<!--Canvas x:Name="canvas" MouseDown="{Binding MouseDownCommand}" MouseMove="{Binding MouseMoveCommandMethod}" MouseUp="{Binding MouseUpCommandMethod}" Background="White">-->
-	<Canvas x:Name="canvas" Background="White" MouseDown="canvas_MouseDown">
-		<i:Interaction.Triggers>
-			<i:EventTrigger EventName="MouseDown">
-				<i:InvokeCommandAction Command="{Binding MouseDownCommand}"/>
-			</i:EventTrigger>
-		</i:Interaction.Triggers>
-		<Rectangle x:Name="rect" Visibility="{Binding RectabgleVisibility}" Canvas.Top="{Binding Y}" Canvas.Left="{Binding X}" Height="{Binding Height}" Width="{Binding Width}"
+	<Canvas x:Name="canvas" Background="White" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp" >
+		<Rectangle x:Name="rect" Visibility="{Binding RectabgleVisibility}" Canvas.Left="{Binding RectStartPoint.X}" Canvas.Top="{Binding RectStartPoint.Y}" Height="{Binding RectSize.Y}" Width="{Binding RectSize.X}"
 				   Fill="Crimson" Opacity="1"/>
 		<!--<Rectangle Width="50" Height="50" Fill="AliceBlue" Opacity="1" Canvas.Top="10" Canvas.Left="10"></Rectangle>-->
 	</Canvas>

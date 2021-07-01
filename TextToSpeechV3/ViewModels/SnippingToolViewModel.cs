@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using TextToSpeechV3.Utility;
 using TextToSpeechV3.Views;
@@ -20,27 +21,21 @@ namespace TextToSpeechV3.ViewModels
 
 		private SnippingTool _view;
 		private Point _startPosition;
+		private bool _snipping;
 
 		#endregion
 
 		#region PUBLIC PROPERTIES
-
-		public double X { get; set; }
-		public double Y { get; set; }
-		public double Width { get; set; }
-		public double Height { get; set; }
 		public Visibility RectabgleVisibility { get; set; }
 		public Point ScreenPosition { get; set; }
+		public Point RectStartPoint { get; set; }
+		public Point RectSize { get; set; }
+
+		public ScreenshotPositionAndSize Result { get; private set; }
 
 		#endregion
 
 		#region COMMANDS
-
-		private RelayCommand<object> _mouseMoveCommand;
-		private RelayCommand<object> _mouseUpCommand;
-
-		public RelayCommand<object> MouseMoveCommand { get { return _mouseMoveCommand; } }
-		public RelayCommand<object> MouseUpCommand { get { return _mouseUpCommand; } }
 
 		#endregion
 
@@ -51,12 +46,8 @@ namespace TextToSpeechV3.ViewModels
 			_view = view;
 			SetStartWindowPositionAccrossAllMonitors();
 			RectabgleVisibility = Visibility.Hidden;
-			_mouseMoveCommand = new RelayCommand<object>(MouseMoveCommandMethod);
-			_mouseUpCommand = new RelayCommand<object>(MouseUpCommandMethod);
-			X = 10;
-			Y = 10;
-			Width = 100;
-			Height = 100;
+			_snipping = false;
+			RectSize = new Point(0, 0);
 		}
 
 		#endregion
@@ -67,33 +58,83 @@ namespace TextToSpeechV3.ViewModels
 
 		public void MouseDownCommandMethod(Point mousePosition)
 		{
+			if (_snipping)
+				return;
+
+			_snipping = true;
 			RectabgleVisibility = Visibility.Visible;
 			_startPosition = mousePosition;
 
-			X = mousePosition.X;
-			Y = mousePosition.Y;
+			RectStartPoint = new Point(mousePosition.X, mousePosition.Y);
+			RectSize = new Point(0, 0);
 
 			OnPropertyChanged(nameof(RectabgleVisibility));
-			OnPropertyChanged(nameof(X));
-			OnPropertyChanged(nameof(Y));
-			OnPropertyChanged(nameof(Width));
-			OnPropertyChanged(nameof(Height));
-
-			int v = 1;
+			OnPropertyChanged(nameof(RectStartPoint));
+			OnPropertyChanged(nameof(RectSize));
 		}
 
-		public void MouseMoveCommandMethod(object nothing)
+		public void MouseMoveCommandMethod(Point mousePosition)
 		{
+			if (!_snipping)
+				return;
 
+			Point newSize = new Point();
+
+			newSize.X = mousePosition.X - RectStartPoint.X;
+			newSize.Y = mousePosition.Y - RectStartPoint.Y;
+
+
+			if(newSize.X < 0)
+			{
+				//RectStartPoint = new Point(mousePosition.X, RectStartPoint.Y);
+				//newSize = new Point(_startPosition.X - mousePosition.X, newSize.Y);
+				newSize = new Point(0, newSize.Y);
+			}
+			if (newSize.Y < 0)
+			{
+				newSize = new Point(newSize.X, 0);
+			}
+
+			//System.Diagnostics.Debug.WriteLine("newSize.X = " + newSize.X);
+
+			RectSize = newSize;
+			OnPropertyChanged(nameof(RectSize));
+			OnPropertyChanged(nameof(RectStartPoint));
 		}
-		public void MouseUpCommandMethod(object nothing)
-		{
 
+		public void MouseUpCommandMethod(Rectangle rectangle)
+		{
+			Point coodinate = rectangle.TranslatePoint(new Point(0, 0), VisualTreeHelper.GetParent(rectangle) as UIElement);
+			Result = new ScreenshotPositionAndSize(
+				Convert.ToInt32(coodinate.X),
+				Convert.ToInt32(coodinate.Y),
+				Convert.ToInt32(rectangle.Width),
+				Convert.ToInt32(rectangle.Height));
+		}
+
+		public void MouseDownButtonMethod(MouseButton mouseButton)
+		{
+			RectabgleVisibility = Visibility.Visible;
+			_snipping = false;
+			OnPropertyChanged(nameof(RectabgleVisibility));
+		}
+
+		public void KeyUpMethod(Key key)
+		{
+			if(key == Key.Escape)
+			{
+
+			}
 		}
 
 		#endregion
 
 		#region PRIVATE METHODS
+
+		private void CancelCurrentSnip()
+		{
+
+		}
 
 		private void SetStartWindowPositionAccrossAllMonitors()
 		{

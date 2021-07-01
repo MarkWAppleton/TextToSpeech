@@ -31,7 +31,29 @@ namespace TextToSpeechV3.Views
 
 		private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			_vm.MouseDownCommandMethod(e.GetPosition(this));
+			if(e.RightButton == MouseButtonState.Pressed)
+			{
+				_vm.MouseDownButtonMethod(MouseButton.Right);
+			}
+			else
+			{
+				_vm.MouseDownCommandMethod(e.GetPosition(this));
+			}
+		}
+
+		private void canvas_MouseMove(object sender, MouseEventArgs e)
+		{
+			_vm.MouseMoveCommandMethod(e.GetPosition(this));
+		}
+
+		private void canvas_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			_vm.MouseUpCommandMethod(rect);
+		}
+
+		private void Window_KeyUp(object sender, KeyEventArgs e)
+		{
+			_vm.KeyUpMethod(e.Key);
 		}
 	}
 }
