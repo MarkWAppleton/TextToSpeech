@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TextToSpeechV3.Utility;
 using TextToSpeechV3.ViewModels;
 
 namespace TextToSpeechV3.Views
@@ -22,11 +23,17 @@ namespace TextToSpeechV3.Views
 	{
 		private SnippingToolViewModel _vm;
 
+		public ObjectPositionAndSize Result { get; set; }
+
 		public SnippingTool()
 		{
 			InitializeComponent();
 			_vm = new SnippingToolViewModel(this);
 			this.DataContext = _vm;
+			if (_vm.CloseAction == null)
+			{
+				_vm.CloseAction = new Action(this.Close);
+			}
 		}
 
 		private void canvas_MouseDown(object sender, MouseButtonEventArgs e)

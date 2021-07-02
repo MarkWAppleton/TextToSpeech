@@ -22,6 +22,7 @@ namespace TextToSpeechV3.ViewModels
 		private ISpeechManager _speechManager;
 		private IHotKeyRegister _speakHotKey;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
+		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();
 		private MainWindow _mainWindow;
 		#endregion
@@ -109,8 +110,7 @@ namespace TextToSpeechV3.ViewModels
 
 		public void SnippingButtonCommandMethod(object nothing)
 		{
-			SnippingTool snippingTool = new SnippingTool();
-			snippingTool.ShowDialog();
+			_snippingScreenshot.TakeSnippingScreenshot();
 		}
 
 		#endregion
