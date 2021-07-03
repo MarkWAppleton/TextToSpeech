@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextToSpeechV3.Utility
+namespace TextToSpeechV3.Model
 {
 	public class ObjectPositionAndSize
 	{

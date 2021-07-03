@@ -55,7 +55,6 @@ namespace TextToSpeechV3.ViewModels
 				Settings.Hotkeys[EnumFeature.Speak].Modifier = value;
 			}
 		}
-
 		public Keys SpeakKey
 		{
 			get
@@ -65,6 +64,29 @@ namespace TextToSpeechV3.ViewModels
 			set
 			{
 				Settings.Hotkeys[EnumFeature.Speak].Key = value;
+			}
+		}
+
+		public Modifiers InstanctScreenshotModifier
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.InstantScreenshot].Modifier;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.InstantScreenshot].Modifier = value;
+			}
+		}
+		public Keys InstanctScreenshotKey
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.InstantScreenshot].Key;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.InstantScreenshot].Key = value;
 			}
 		}
 
@@ -119,6 +141,11 @@ namespace TextToSpeechV3.ViewModels
 
 		public void OkButtonCommandMethod(string nothing)
 		{
+			if (!Validate())
+			{
+				return;
+			}
+
 			Properties.Settings.Default.SpeechSettings = JsonSerializer.Serialize(Settings);
 			Properties.Settings.Default.Save();
 			_view.SpeechSettings = Settings.ShallowClone();
@@ -127,6 +154,11 @@ namespace TextToSpeechV3.ViewModels
 
 		public void ApplyButtonCommandMethod(string nothing)
 		{
+			if (!Validate())
+			{
+				return;
+			}
+
 			Properties.Settings.Default.SpeechSettings = JsonSerializer.Serialize(Settings);
 			Properties.Settings.Default.Save();
 			_view.SpeechSettings = Settings.ShallowClone();
@@ -135,6 +167,17 @@ namespace TextToSpeechV3.ViewModels
 		#endregion
 
 		#region PRIVATE METHODS
+
+		private bool Validate()
+		{
+			List<string> validationResults;
+			bool value = Settings.IsValid(out validationResults);
+			if (!value)
+			{
+
+			}
+			return value;
+		}
 
 		#endregion
 

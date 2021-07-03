@@ -15,5 +15,14 @@
 		<TextBlock x:Name="txtCopyResults"/>-->
 		<Button Content="Settings" Command="{Binding Path=SettingsButtonCommand}"/>
 		<Button Content="Snipping" Command="{Binding Path=SnippingButtonCommand}"/>
+		<ListView ItemsSource="{Binding Hotkeys}">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="Feature" Width="150" DisplayMemberBinding="{Binding Key}"/>
+					<GridViewColumn Header="Modifier" Width="150" DisplayMemberBinding="{Binding Value.Modifier}"/>
+					<GridViewColumn Header="Key" Width="150" DisplayMemberBinding="{Binding Value.Key}"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
 	</StackPanel>
 </Window>

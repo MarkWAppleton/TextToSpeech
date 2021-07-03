@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -23,6 +24,7 @@ namespace TextToSpeechV3.ViewModels
 		private ISpeechManager _speechManager;
 		private IHotKeyRegister _speakHotKey;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
+		private IOcrEngine _ocrEngine = new TesseractOcrEngine();
 		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();
 		private MainWindow _mainWindow;
@@ -31,6 +33,8 @@ namespace TextToSpeechV3.ViewModels
 		#region PUBLIC PROPERTIES
 
 		public SpeechSettings Settings { get; set; }
+
+		public Dictionary<EnumFeature, Hotkey> Hotkeys { get { return Settings.Hotkeys; } }
 
 		#endregion
 
@@ -73,43 +77,18 @@ namespace TextToSpeechV3.ViewModels
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
 			_snippingButtonCommand = new RelayCommand<object>(SnippingButtonCommandMethod);
 
-			SetupTesseractTrace();
 			//_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
 			//_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
 		}
 
 		#endregion
 
-
-		static TraceSource ts = new TraceSource("Tesseract", SourceLevels.Verbose);
-
-		private void SetupTesseractTrace()
-		{
-			//https://github.com/charlesw/tesseract/wiki/Error-1
-			//https://www.codeproject.com/Articles/5255953/Use-Trace-and-TraceSource-in-NET-Core-Logging
-
-			//ConsoleTraceListener listener = new ConsoleTraceListener();
-			//listener.
-			//Trace.Listeners.Add(new ConsoleTraceListener());
-			
-			ts.Listeners.Add(new ConsoleTraceListener());
-			ts.Listeners.Add(new ConsoleTraceListener(true));
-
-			ts.TraceInformation("traceinfo");
-
-			EventLogTraceListener eltl = new EventLogTraceListener("Tesseract");
-
-			Trace.Listeners.Add(eltl);
-
-		}
-
-
 		#region PUBLIC METHODS
 
 		public void SpeakHotKeyMethod(object sender, EventArgs e)
 		{
 			string text = _copyTextFromScreenService.GetTextFromScreen();
-			_speechManager.SpeakText(text);//, Settings.Voice, Settings.Rate);
+			_speechManager.SpeakText(text);
 		}
 		
 		public void InstantScreenshotHotkeyMethod(object sender, EventArgs e)
@@ -134,7 +113,9 @@ namespace TextToSpeechV3.ViewModels
 
 		public void SnippingButtonCommandMethod(object nothing)
 		{
-			_snippingScreenshot.TakeSnippingScreenshot();
+			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
+			string orcResult = _ocrEngine.RunOcr(snippingResult);
+			_speechManager.SpeakText(orcResult);
 		}
 
 		#endregion
@@ -144,6 +125,7 @@ namespace TextToSpeechV3.ViewModels
 		private void AddSupportedHotkeys(SpeechSettings settings)
 		{
 			CheckAndAddHotKey(settings, EnumFeature.Speak, new Hotkey(Keys.NumPad9, Modifiers.Control));
+			CheckAndAddHotKey(settings, EnumFeature.InstantScreenshot, new Hotkey(Keys.NumPad8, Modifiers.Control));
 		}
 
 		private void CheckAndAddHotKey(SpeechSettings settings, EnumFeature feature, Hotkey hotkey)

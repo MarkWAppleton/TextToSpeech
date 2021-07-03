@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextToSpeechV3.Views"
+		xmlns:src="clr-namespace:TextToSpeechV3.ViewModels"
         mc:Ignorable="d"
         Title="SettingsView" Height="450" Width="800">
 	<Grid>
@@ -66,8 +67,8 @@
 				<ComboBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SpeakKey}"/>
 
 				<TextBlock Grid.Row="1" Grid.Column="0" Text="Instanct Screenshot Hotkey: "/>
-				<ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Modifiers}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
-				<ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+				<ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Modifiers}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding InstanctScreenshotModifier}"/>
+				<ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding InstanctScreenshotKey}"/>
 			</Grid>
 
 		</Grid>
@@ -81,7 +82,7 @@
 			</Grid.ColumnDefinitions>
 			<Button Grid.Column="1" Content="OK" Command="{Binding OkButtonCommand}" Margin="5"/>
 			<Button Grid.Column="2" Content="Cancel" Command="{Binding CancelButtonCommand}" Margin="5"/>
-			<Button Grid.Column="3" Content="Apply" Command="{Binding SaveButtonCommand}" Margin="5"/>
+			<Button Grid.Column="3" Content="Apply" Command="{Binding ApplyButtonCommand}" Margin="5"/>
 		</Grid>
 	</Grid>
 </Window>

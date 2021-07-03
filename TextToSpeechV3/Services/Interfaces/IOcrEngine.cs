@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace TextToSpeechV3.Services.Interfaces
 {
-	public interface ISnippingScreenshot
+	public interface IOcrEngine
 	{
-		Bitmap TakeSnippingScreenshot();
+		string RunOcr(Bitmap image);
 	}
 }

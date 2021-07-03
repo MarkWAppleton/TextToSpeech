@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using TextToSpeechV3.Utility;
+using TextToSpeechV3.Model;
 using TextToSpeechV3.Views;
 
 namespace TextToSpeechV3.ViewModels

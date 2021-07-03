@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using TextToSpeechV3.Utility;
+using TextToSpeechV3.Model;
 using TextToSpeechV3.ViewModels;
 
 namespace TextToSpeechV3.Views
