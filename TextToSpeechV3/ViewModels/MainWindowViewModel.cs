@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -72,12 +73,35 @@ namespace TextToSpeechV3.ViewModels
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
 			_snippingButtonCommand = new RelayCommand<object>(SnippingButtonCommandMethod);
 
+			SetupTesseractTrace();
 			//_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
 			//_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
 		}
 
 		#endregion
 
+
+		static TraceSource ts = new TraceSource("Tesseract", SourceLevels.Verbose);
+
+		private void SetupTesseractTrace()
+		{
+			//https://github.com/charlesw/tesseract/wiki/Error-1
+			//https://www.codeproject.com/Articles/5255953/Use-Trace-and-TraceSource-in-NET-Core-Logging
+
+			//ConsoleTraceListener listener = new ConsoleTraceListener();
+			//listener.
+			//Trace.Listeners.Add(new ConsoleTraceListener());
+			
+			ts.Listeners.Add(new ConsoleTraceListener());
+			ts.Listeners.Add(new ConsoleTraceListener(true));
+
+			ts.TraceInformation("traceinfo");
+
+			EventLogTraceListener eltl = new EventLogTraceListener("Tesseract");
+
+			Trace.Listeners.Add(eltl);
+
+		}
 
 
 		#region PUBLIC METHODS

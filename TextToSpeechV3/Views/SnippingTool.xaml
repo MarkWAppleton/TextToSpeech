@@ -7,8 +7,7 @@
 		xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="SnippingTool" Height="600" Width="600" AllowsTransparency="True" Opacity="0.5" WindowStyle="None"
-		WindowState="Normal" Topmost="True" KeyUp="Window_KeyUp">
-	<!--Canvas x:Name="canvas" MouseDown="{Binding MouseDownCommand}" MouseMove="{Binding MouseMoveCommandMethod}" MouseUp="{Binding MouseUpCommandMethod}" Background="White">-->
+		WindowState="Maximized" Topmost="True" KeyUp="Window_KeyUp">
 	<Canvas x:Name="canvas" Background="White" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp" >
 		<Rectangle x:Name="rect" Visibility="{Binding RectabgleVisibility}" Canvas.Left="{Binding SnippingWindow.XCoordinate}" Canvas.Top="{Binding SnippingWindow.YCoordinate}" Height="{Binding SnippingWindow.Height}" Width="{Binding SnippingWindow.Width}"
 				   Fill="Crimson" Opacity="1"/>
