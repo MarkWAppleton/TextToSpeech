@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextToSpeechV3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-	<StackPanel>
-		<!--<TextBox Name="textBox" Text="{Binding SelectedText, Mode=TwoWay}"/>
-		<Button Content="Button" Command="{Binding Path=SpeechTestButtonCommand}" CommandParameter="{Binding ElementName=textBox,Path=Text}" />
-		<TextBox x:Name="txtSpeechRate" Text="{Binding Settings.Rate, Mode=TwoWay}"/>
-		<ListBox x:Name="lbVoices" ItemsSource="{Binding Voices}" SelectedItem="{Binding Settings.Voice}"></ListBox>
-		<TextBox x:Name="txtResult" IsReadOnly="True"/>
-		<TextBlock x:Name="txtCopyResults"/>-->
-		<Button Content="Settings" Command="{Binding Path=SettingsButtonCommand}"/>
-		<Button Content="Snipping" Command="{Binding Path=SnippingButtonCommand}"/>
-		<ListView ItemsSource="{Binding Hotkeys}">
+        Title="MainWindow" Height="600" Width="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Button Grid.Row="0" Content="Settings" Command="{Binding Path=SettingsButtonCommand}"/>
+		<Button Grid.Row="1" Content="Snipping" Command="{Binding Path=SnippingButtonCommand}"/>
+		<ListView Grid.Row="2" ItemsSource="{Binding Hotkeys}">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="Feature" Width="150" DisplayMemberBinding="{Binding Key}"/>
@@ -24,5 +24,15 @@
 				</GridView>
 			</ListView.View>
 		</ListView>
-	</StackPanel>
+		<ListView Grid.Row="3" ItemsSource="{Binding Images}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<StackPanel>
+						<Image Source="{Binding}" Stretch="None" />
+					</StackPanel>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+		
+	</Grid>
 </Window>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TextToSpeechV3.Hotkeys;
 using TextToSpeechV3.Model;
 using TextToSpeechV3.Services;
@@ -24,8 +25,9 @@ namespace TextToSpeechV3.ViewModels
 		private ISpeechManager _speechManager;
 		private IHotKeyRegister _speakHotKey;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
-		private IOcrEngine _ocrEngine = new TesseractOcrEngine();
 		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
+		private IOcrEngine _ocrEngine = new TesseractOcrEngine();
+		private IImageProcessingService _imageProcessingService = new ImageProcessingService();
 		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();
 		private MainWindow _mainWindow;
 		#endregion
@@ -33,19 +35,17 @@ namespace TextToSpeechV3.ViewModels
 		#region PUBLIC PROPERTIES
 
 		public SpeechSettings Settings { get; set; }
-
 		public Dictionary<EnumFeature, Hotkey> Hotkeys { get { return Settings.Hotkeys; } }
+		public BitmapImage Image { get; set; }
+		public ObservableCollection<BitmapImage> Images { get; set; }
 
 		#endregion
 
 		#region COMMANDS
 
-		private RelayCommand<string> _speechTestButtonCommand;
-
 		private RelayCommand<object> _settingsButtonCommand;
 
 		private RelayCommand<object> _snippingButtonCommand;
-		public RelayCommand<string> SpeechTestButtonCommand { get { return _speechTestButtonCommand; } }
 		public RelayCommand<object> SettingsButtonCommand { get { return _settingsButtonCommand; } }
 		public RelayCommand<object> SnippingButtonCommand { get { return _snippingButtonCommand; } }
 
@@ -55,6 +55,7 @@ namespace TextToSpeechV3.ViewModels
 		public MainWindowViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
+			Images = new ObservableCollection<BitmapImage>();
 			string speechSettingsJson = Properties.Settings.Default.SpeechSettings;
 			if (string.IsNullOrWhiteSpace(speechSettingsJson))
 			{
@@ -114,6 +115,11 @@ namespace TextToSpeechV3.ViewModels
 		public void SnippingButtonCommandMethod(object nothing)
 		{
 			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
+			Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
+			Bitmap processed = _imageProcessingService.ProcessImage(snippingResult);
+			Images.Add(BitmapConverter.ToBitmapImage(processed));
+
+			OnPropertyChanged(nameof(Image));
 			string orcResult = _ocrEngine.RunOcr(snippingResult);
 			_speechManager.SpeakText(orcResult);
 		}
