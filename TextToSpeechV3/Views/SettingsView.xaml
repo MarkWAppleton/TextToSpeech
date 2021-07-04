@@ -61,11 +61,11 @@
 					<RowDefinition Height="auto"/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-				
+
 				<TextBlock Grid.Row="0" Grid.Column="0" Text="Speak Hotkey: "/>
 				<ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Modifiers}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SpeakModifier}"/>
 				<ComboBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SpeakKey}"/>
-
+				
 				<TextBlock Grid.Row="1" Grid.Column="0" Text="Instanct Screenshot Hotkey: "/>
 				<ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Modifiers}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding InstanctScreenshotModifier}"/>
 				<ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Keys}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding InstanctScreenshotKey}"/>
@@ -73,6 +73,10 @@
 
 		</Grid>
 		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
@@ -80,9 +84,10 @@
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
-			<Button Grid.Column="1" Content="OK" Command="{Binding OkButtonCommand}" Margin="5"/>
-			<Button Grid.Column="2" Content="Cancel" Command="{Binding CancelButtonCommand}" Margin="5"/>
-			<Button Grid.Column="3" Content="Apply" Command="{Binding ApplyButtonCommand}" Margin="5"/>
+			<TextBlock Grid.Row="0" Grid.ColumnSpan="5" Text="{Binding ErrorString}" TextAlignment="Center" Foreground="Red" Visibility="{Binding ValidationErrorVisilibity}"/>
+			<Button Grid.Row="1" Grid.Column="1" Content="OK" Command="{Binding OkButtonCommand}" Margin="5"/>
+			<Button Grid.Row="1" Grid.Column="2" Content="Cancel" Command="{Binding CancelButtonCommand}" Margin="5"/>
+			<Button Grid.Row="1" Grid.Column="3" Content="Apply" Command="{Binding ApplyButtonCommand}" Margin="5"/>
 		</Grid>
 	</Grid>
 </Window>

@@ -8,6 +8,7 @@ using TextToSpeechV3.Utility;
 using System.Text.Json;
 using TextToSpeechV3.Views;
 using TextToSpeechV3.Hotkeys;
+using System.Windows;
 
 namespace TextToSpeechV3.ViewModels
 {
@@ -17,6 +18,7 @@ namespace TextToSpeechV3.ViewModels
 		private string _speechTestText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 		private ISpeechManager _speechManager;
 		private SettingsView _view;
+		private string _errorString;
 		#endregion
 
 		#region PUBLIC PROPERTIES
@@ -90,6 +92,31 @@ namespace TextToSpeechV3.ViewModels
 			}
 		}
 
+		public string ErrorString 
+		{ 
+			get { return _errorString; } 
+			set 
+			{ 
+				_errorString = value;
+				OnPropertyChanged(nameof(ErrorString));
+				OnPropertyChanged(nameof(ValidationErrorVisilibity));
+			} 
+		}
+
+		public Visibility ValidationErrorVisilibity 
+		{ 
+			get
+			{
+				if (string.IsNullOrWhiteSpace(ErrorString))
+				{
+					return Visibility.Collapsed;
+				}
+				else
+				{
+					return Visibility.Visible;
+				}
+			} 
+		}
 
 		#endregion
 
@@ -174,7 +201,12 @@ namespace TextToSpeechV3.ViewModels
 			bool value = Settings.IsValid(out validationResults);
 			if (!value)
 			{
+				ErrorString = validationResults[0];
+			}
 
+			if (value)
+			{
+				ErrorString = "";
 			}
 			return value;
 		}
