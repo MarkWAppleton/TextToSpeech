@@ -116,12 +116,18 @@ namespace TextToSpeechV3.ViewModels
 		{
 			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
 			Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
-			Bitmap processed = _imageProcessingService.ProcessImage(snippingResult);
-			Images.Add(BitmapConverter.ToBitmapImage(processed));
+
+			List<Bitmap> imageProcessing;
+
+			Bitmap processed = _imageProcessingService.ProcessImage(snippingResult, out imageProcessing);
+
+
+			imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
 
 			OnPropertyChanged(nameof(Image));
 			string orcResult = _ocrEngine.RunOcr(snippingResult);
-			_speechManager.SpeakText(orcResult);
+			_speechManager.SpeakText(_ocrEngine.RunOcr(snippingResult));
+			//_speechManager.SpeakText(orcResult);
 		}
 
 		#endregion

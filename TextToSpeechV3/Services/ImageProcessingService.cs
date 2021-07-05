@@ -12,11 +12,28 @@ namespace TextToSpeechV3.Services
 	public class ImageProcessingService : IImageProcessingService
 	{
 
-		public Bitmap ProcessImage(Bitmap original)
+		public Bitmap ProcessImage(Bitmap original, out List<Bitmap> processingSteps)
 		{
+			processingSteps = new List<Bitmap>();
+
+			byte[,] test = new byte[,]
+			{
+				{1,1,1,1,1},
+				{1,1,1,1,1},
+				{1,1,1,1,1},
+				{1,1,1,1,1},
+				{1,1,1,1,1}
+			};
+			using Mat kurnal = new Mat(5, 5, MatType.CV_8UC1, test);
+
 			using Mat mat1 = OpenCvSharp.Extensions.BitmapConverter.ToMat(original);
+
 			//Converts to grayscale;
 			Cv2.CvtColor(mat1, mat1, ColorConversionCodes.BGR2GRAY);
+			processingSteps.Add(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(mat1));
+
+			Cv2.Threshold(mat1, mat1, 0, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
+			processingSteps.Add(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(mat1));
 
 			return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(mat1);
 		}

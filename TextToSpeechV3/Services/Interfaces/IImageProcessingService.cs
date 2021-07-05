@@ -9,6 +9,6 @@ namespace TextToSpeechV3.Services.Interfaces
 {
 	public interface IImageProcessingService
 	{
-		Bitmap ProcessImage(Bitmap original);
+		Bitmap ProcessImage(Bitmap original, out List<Bitmap> processingSteps);
 	}
 }
