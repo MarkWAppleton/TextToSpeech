@@ -6,7 +6,8 @@
 		xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:TextToSpeechV3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="600" Width="800"
+		ShowInTaskbar="False" Visibility="Hidden">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
