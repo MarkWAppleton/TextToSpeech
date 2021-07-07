@@ -22,6 +22,7 @@ namespace TextToSpeechV3.SpeechManager
 		{
 			_spVoice = new SpVoice();
 			_spVoice.EndStream += SPVoiceEndSpeaking;
+			_spVoice.AlertBoundary = SpeechVoiceEvents.SVEPhoneme;
 			_isSpeaking = false;
 		}
 
@@ -57,7 +58,7 @@ namespace TextToSpeechV3.SpeechManager
 		{
 			if (_isSpeaking)
 			{
-				_spVoice.Skip("Sentence", int.MaxValue);
+				_spVoice.Speak("", SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
 				_isSpeaking = false;
 			}
 		}
