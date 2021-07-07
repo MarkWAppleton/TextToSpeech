@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,7 +29,13 @@ namespace TextToSpeechV3.Views
 		public MainWindow()
 		{
 			InitializeComponent();
-			this.DataContext = new MainWindowViewModel(this);
+			notifyIcon.Icon = Properties.Resources.TextToSpeachIcon;
+			MainWindowViewModel vm = new MainWindowViewModel(this);
+			this.DataContext = vm;
+			if (vm.CloseAction == null)
+			{
+				vm.CloseAction = new Action(this.Close);
+			}
 		}
 	}
 }

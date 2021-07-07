@@ -27,13 +27,14 @@ namespace TextToSpeechV3.ViewModels
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
 		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 		private IOcrEngine _ocrEngine = new TesseractOcrEngine();
-		private IImageProcessingService _imageProcessingService = new ImageProcessingService();
+		private IImageProcessingService _imageProcessingService = new SimpleResizeImageProcessingService();
 		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();
 		private MainWindow _mainWindow;
 		#endregion
 
 		#region PUBLIC PROPERTIES
 
+		public Action CloseAction { get; set; }
 		public SpeechSettings Settings { get; set; }
 		public Dictionary<EnumFeature, Hotkey> Hotkeys { get { return Settings.Hotkeys; } }
 		public BitmapImage Image { get; set; }
@@ -44,10 +45,9 @@ namespace TextToSpeechV3.ViewModels
 		#region COMMANDS
 
 		private RelayCommand<object> _settingsButtonCommand;
-
-		private RelayCommand<object> _snippingButtonCommand;
+		private RelayCommand<object> _clostCommand;
 		public RelayCommand<object> SettingsButtonCommand { get { return _settingsButtonCommand; } }
-		public RelayCommand<object> SnippingButtonCommand { get { return _snippingButtonCommand; } }
+		public RelayCommand<object> ClostCommand { get { return _clostCommand; } }
 
 		#endregion
 
@@ -76,10 +76,7 @@ namespace TextToSpeechV3.ViewModels
 			RegisterHotkeys();
 
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
-			_snippingButtonCommand = new RelayCommand<object>(SnippingButtonCommandMethod);
-
-			//_speakHotKey = new HotKeyRegister(mainWindow, new Hotkey(Key.NumPad9, Modifiers.Control));
-			//_speakHotKey.HotkeyTriggered += SpeakHotKeyMethod;
+			_clostCommand = new RelayCommand<object>(CloseCommandMethod);
 		}
 
 		#endregion
@@ -94,7 +91,16 @@ namespace TextToSpeechV3.ViewModels
 		
 		public void InstantScreenshotHotkeyMethod(object sender, EventArgs e)
 		{
+			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
+			//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
 
+			List<Bitmap> imageProcessing;
+			Bitmap processed = _imageProcessingService.ProcessImage(snippingResult, out imageProcessing);
+			//imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
+			//OnPropertyChanged(nameof(Image));
+
+			string orcResult = _ocrEngine.RunOcr(processed);
+			_speechManager.SpeakText(orcResult);
 		}
 
 		public void SettingsButtonCommandMethod(object nothing)
@@ -110,24 +116,12 @@ namespace TextToSpeechV3.ViewModels
 			UnregisterHotkeys();
 			_speechManager.SetAllSettings(Settings);
 			RegisterHotkeys();
+			OnPropertyChanged(nameof(Settings));
 		}
 
-		public void SnippingButtonCommandMethod(object nothing)
+		public void CloseCommandMethod(object nothing)
 		{
-			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
-			Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
-
-			List<Bitmap> imageProcessing;
-
-			Bitmap processed = _imageProcessingService.ProcessImage(snippingResult, out imageProcessing);
-
-
-			imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
-
-			OnPropertyChanged(nameof(Image));
-			string orcResult = _ocrEngine.RunOcr(snippingResult);
-			_speechManager.SpeakText(_ocrEngine.RunOcr(snippingResult));
-			//_speechManager.SpeakText(orcResult);
+			CloseAction();
 		}
 
 		#endregion
@@ -150,12 +144,15 @@ namespace TextToSpeechV3.ViewModels
 
 		private void RegisterHotkeys()
 		{
+			Hotkey speakHotkey = Settings.Hotkeys[EnumFeature.Speak];
+			IHotKeyRegister speakHotkeyRegister = new HotKeyRegister(_mainWindow, speakHotkey);
+			speakHotkeyRegister.HotkeyTriggered += SpeakHotKeyMethod;
+			_activeHotkeys.Add(EnumFeature.Speak, speakHotkeyRegister);
 
-			Hotkey hotkey = Settings.Hotkeys[(int)EnumFeature.Speak];
-			IHotKeyRegister speakHotkey = new HotKeyRegister(_mainWindow, hotkey);
-			speakHotkey.HotkeyTriggered += SpeakHotKeyMethod;
-			_activeHotkeys.Add(EnumFeature.Speak, speakHotkey);
-
+			Hotkey instanceScreenshotHotkey = Settings.Hotkeys[EnumFeature.InstantScreenshot];
+			IHotKeyRegister instanceScreenshotHotkeyRegister = new HotKeyRegister(_mainWindow, instanceScreenshotHotkey);
+			instanceScreenshotHotkeyRegister.HotkeyTriggered += InstantScreenshotHotkeyMethod;
+			_activeHotkeys.Add(EnumFeature.InstantScreenshot, instanceScreenshotHotkeyRegister);
 		}
 
 		private void UnregisterHotkeys()
@@ -165,6 +162,10 @@ namespace TextToSpeechV3.ViewModels
 			speakHotkey.HotkeyTriggered -= SpeakHotKeyMethod;
 			_activeHotkeys.Remove(EnumFeature.Speak);
 
+			IHotKeyRegister instanceScreenshotHotkey = _activeHotkeys[EnumFeature.InstantScreenshot];
+			instanceScreenshotHotkey.UnregisterHotkey();
+			instanceScreenshotHotkey.HotkeyTriggered -= InstantScreenshotHotkeyMethod;
+			_activeHotkeys.Remove(EnumFeature.InstantScreenshot);
 		}
 
 		#endregion
