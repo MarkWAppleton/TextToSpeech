@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TextToSpeechV3.Hotkeys;
@@ -100,7 +101,9 @@ namespace TextToSpeechV3.ViewModels
 			//OnPropertyChanged(nameof(Image));
 
 			string orcResult = _ocrEngine.RunOcr(processed);
-			_speechManager.SpeakText(orcResult);
+			string unescapedText = Regex.Unescape(orcResult);
+			string processedText = unescapedText.Replace("\n", " ");
+			_speechManager.SpeakText(processedText);
 		}
 
 		public void SettingsButtonCommandMethod(object nothing)
