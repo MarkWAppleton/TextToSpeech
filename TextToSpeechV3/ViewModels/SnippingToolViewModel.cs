@@ -103,6 +103,9 @@ namespace TextToSpeechV3.ViewModels
 
 		public void MouseUpCommandMethod(Rectangle rectangle)
 		{
+			if (!_snipping)
+				return;
+
 			Point coodinate = rectangle.TranslatePoint(new Point(0, 0), VisualTreeHelper.GetParent(rectangle) as UIElement);
 			_view.Result = new ObjectPositionAndSize(coodinate.X,coodinate.Y,rectangle.Width,rectangle.Height);
 			CancelCurrentSnip();
@@ -126,6 +129,7 @@ namespace TextToSpeechV3.ViewModels
 				}
 				else
 				{
+					_view.Result = null;
 					CloseAction();
 				}
 			}

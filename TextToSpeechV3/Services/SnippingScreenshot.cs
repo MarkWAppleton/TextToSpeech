@@ -14,11 +14,27 @@ namespace TextToSpeechV3.Services
 {
 	public class SnippingScreenshot : ISnippingScreenshot
 	{
+		private bool _takingScreenshot;
+
+		public SnippingScreenshot()
+		{
+			_takingScreenshot = false;
+		}
+
 		public Bitmap TakeSnippingScreenshot()
 		{
+			if (_takingScreenshot)
+				return null;
+
+			_takingScreenshot = true;
+
 			SnippingTool snippingTool = new SnippingTool();
 			snippingTool.ShowDialog();
+			_takingScreenshot = false;
 			ObjectPositionAndSize screenshotDetails = snippingTool.Result;
+
+			if (screenshotDetails == null)
+				return null;
 
 			Rectangle rect = screenshotDetails.ToRectangle();
 			Bitmap bmp = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);

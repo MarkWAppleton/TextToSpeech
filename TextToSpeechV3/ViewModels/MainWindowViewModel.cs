@@ -93,6 +93,10 @@ namespace TextToSpeechV3.ViewModels
 		public void InstantScreenshotHotkeyMethod(object sender, EventArgs e)
 		{
 			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
+
+			if (snippingResult == null)
+				return;
+
 			//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
 
 			List<Bitmap> imageProcessing;
