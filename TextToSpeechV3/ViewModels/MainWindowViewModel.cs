@@ -92,6 +92,12 @@ namespace TextToSpeechV3.ViewModels
 		
 		public void InstantScreenshotHotkeyMethod(object sender, EventArgs e)
 		{
+			if (_speechManager.IsSpeaking)
+			{
+				_speechManager.StopSpeaking();
+				return;
+			}
+
 			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
 
 			if (snippingResult == null)
