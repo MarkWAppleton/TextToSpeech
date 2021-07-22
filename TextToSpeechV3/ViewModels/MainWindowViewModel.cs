@@ -86,34 +86,48 @@ namespace TextToSpeechV3.ViewModels
 
 		public void SpeakHotKeyMethod(object sender, EventArgs e)
 		{
-			string text = _copyTextFromScreenService.GetTextFromScreen();
-			_speechManager.SpeakText(text);
+			try
+			{
+				string text = _copyTextFromScreenService.GetTextFromScreen();
+				_speechManager.SpeakText(text);
+			}
+			catch (Exception ex)
+			{
+				_mainWindow.ShowError(ex.Message);
+			}
 		}
 		
 		public void InstantScreenshotHotkeyMethod(object sender, EventArgs e)
 		{
-			if (_speechManager.IsSpeaking)
+			try
 			{
-				_speechManager.StopSpeaking();
-				return;
+				if (_speechManager.IsSpeaking)
+				{
+					_speechManager.StopSpeaking();
+					return;
+				}
+
+				Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
+
+				if (snippingResult == null)
+					return;
+
+				//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
+
+				List<Bitmap> imageProcessing;
+				Bitmap processed = _imageProcessingService.ProcessImage(snippingResult, out imageProcessing);
+				//imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
+				//OnPropertyChanged(nameof(Image));
+
+				string orcResult = _ocrEngine.RunOcr(processed);
+				string unescapedText = Regex.Unescape(orcResult);
+				string processedText = unescapedText.Replace("\n", " ");
+				_speechManager.SpeakText(processedText);
+			} 
+			catch(Exception ex)
+			{
+				_mainWindow.ShowError(ex.Message);
 			}
-
-			Bitmap snippingResult = _snippingScreenshot.TakeSnippingScreenshot();
-
-			if (snippingResult == null)
-				return;
-
-			//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
-
-			List<Bitmap> imageProcessing;
-			Bitmap processed = _imageProcessingService.ProcessImage(snippingResult, out imageProcessing);
-			//imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
-			//OnPropertyChanged(nameof(Image));
-
-			string orcResult = _ocrEngine.RunOcr(processed);
-			string unescapedText = Regex.Unescape(orcResult);
-			string processedText = unescapedText.Replace("\n", " ");
-			_speechManager.SpeakText(processedText);
 		}
 
 		public void SettingsButtonCommandMethod(object nothing)

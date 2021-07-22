@@ -32,5 +32,9 @@ namespace TextToSpeechV3.Views
 				vm.CloseAction = new Action(this.Close);
 			}
 		}
+		public void ShowError(string message)
+		{
+			MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 	}
 }

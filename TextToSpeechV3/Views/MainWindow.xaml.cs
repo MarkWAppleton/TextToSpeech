@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using TextToSpeechV3.Hotkeys;
 using TextToSpeechV3.SpeechManager;
 using TextToSpeechV3.ViewModels;
+using MessageBox = System.Windows.MessageBox;
 
 namespace TextToSpeechV3.Views
 {
@@ -36,6 +37,11 @@ namespace TextToSpeechV3.Views
 			{
 				vm.CloseAction = new Action(this.Close);
 			}
+		}
+
+		public void ShowError(string message)
+		{
+			MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 	}
 }

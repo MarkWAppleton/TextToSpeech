@@ -149,15 +149,22 @@ namespace TextToSpeechV3.ViewModels
 
 		public void SpeechTestButtonCommandMethod(string nothing)
 		{
-			if (_speechManager!= null && _speechManager.IsSpeaking)
+			try
 			{
-				_speechManager?.StopSpeaking();
-			} 
-			else
+				if (_speechManager != null && _speechManager.IsSpeaking)
+				{
+					_speechManager?.StopSpeaking();
+				}
+				else
+				{
+					_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings.Engine);
+					_speechManager.SetAllSettings(Settings);
+					_speechManager.SpeakText(_speechTestText);
+				}
+			}
+			catch (Exception ex)
 			{
-				_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings.Engine);
-				_speechManager.SetAllSettings(Settings);
-				_speechManager.SpeakText(_speechTestText);
+				_view.ShowError(ex.Message);
 			}
 		}
 
