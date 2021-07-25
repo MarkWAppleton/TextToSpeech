@@ -46,8 +46,10 @@ namespace TextToSpeechV3.ViewModels
 		#region COMMANDS
 
 		private RelayCommand<object> _settingsButtonCommand;
+		private RelayCommand<object> _aboutCommand;
 		private RelayCommand<object> _clostCommand;
 		public RelayCommand<object> SettingsButtonCommand { get { return _settingsButtonCommand; } }
+		public RelayCommand<object> AboutCommand { get { return _aboutCommand; } }
 		public RelayCommand<object> ClostCommand { get { return _clostCommand; } }
 
 		#endregion
@@ -77,6 +79,7 @@ namespace TextToSpeechV3.ViewModels
 			RegisterHotkeys();
 
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
+			_aboutCommand = new RelayCommand<object>(AboutCommandMethod);
 			_clostCommand = new RelayCommand<object>(CloseCommandMethod);
 		}
 
@@ -144,6 +147,10 @@ namespace TextToSpeechV3.ViewModels
 			_speechManager.SetAllSettings(Settings);
 			RegisterHotkeys();
 			OnPropertyChanged(nameof(Settings));
+		}
+		public void AboutCommandMethod(object nothing)
+		{
+			new AboutView().ShowDialog();
 		}
 
 		public void CloseCommandMethod(object nothing)

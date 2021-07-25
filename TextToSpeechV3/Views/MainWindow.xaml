@@ -42,6 +42,7 @@
 			<tb:TaskbarIcon.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="Settings" Command="{Binding SettingsButtonCommand}" />
+					<MenuItem Header="About" Command="{Binding AboutCommand}"/>
 					<MenuItem Header="Exit" Command="{Binding ClostCommand}"/>
 				</ContextMenu>
 			</tb:TaskbarIcon.ContextMenu>

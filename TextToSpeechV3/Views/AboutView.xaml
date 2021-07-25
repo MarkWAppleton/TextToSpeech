@@ -1,0 +1,30 @@
+﻿<Window x:Class="TextToSpeechV3.Views.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TextToSpeechV3.Views"
+        mc:Ignorable="d"
+        Title="AboutView" Height="200" Width="500" WindowStartupLocation="CenterScreen">
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+
+		<Label Grid.Row="0" Grid.Column="0">Creator:</Label>
+		<Label Grid.Row="0" Grid.Column="1">Mark Appleton</Label>
+		
+		<Label Grid.Row="1" Grid.Column="0">Program details:</Label>
+		<TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0">
+			See the github page
+			<Hyperlink NavigateUri="https://github.com/MarkWAppleton/TextToSpeechV3">Here</Hyperlink>
+		</TextBlock>
+		
+	</Grid>
+</Window>

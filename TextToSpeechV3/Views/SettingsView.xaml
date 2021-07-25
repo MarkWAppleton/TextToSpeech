@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TextToSpeechV3.Views"
 		xmlns:src="clr-namespace:TextToSpeechV3.ViewModels"
         mc:Ignorable="d"
-        Title="SettingsView" Height="450" Width="800">
+        Title="SettingsView" Height="450" Width="800" WindowStartupLocation="CenterScreen">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
