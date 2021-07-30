@@ -14,6 +14,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 
@@ -25,6 +26,13 @@
 			See the github page
 			<Hyperlink NavigateUri="https://github.com/MarkWAppleton/TextToSpeechV3">Here</Hyperlink>
 		</TextBlock>
+
+		<Label Grid.Row="2">Support:</Label>
+		<TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0">
+			Buy me a coffee at 
+			<Hyperlink NavigateUri="https://ko-fi.com/markwappleton">https://ko-fi.com/markwappleton</Hyperlink>
+		</TextBlock>
+		
 		
 	</Grid>
 </Window>
