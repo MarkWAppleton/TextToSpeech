@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 
-namespace TextToSpeechV3.Utility
+namespace TextToSpeech.Utility
 {
 	public class RelayCommand<T> : ICommand
 	{

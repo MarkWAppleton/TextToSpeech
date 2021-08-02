@@ -10,15 +10,15 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using TextToSpeechV3.Hotkeys;
-using TextToSpeechV3.Model;
-using TextToSpeechV3.Services;
-using TextToSpeechV3.Services.Interfaces;
-using TextToSpeechV3.SpeechManager;
-using TextToSpeechV3.Utility;
-using TextToSpeechV3.Views;
+using TextToSpeech.Hotkeys;
+using TextToSpeech.Model;
+using TextToSpeech.Services;
+using TextToSpeech.Services.Interfaces;
+using TextToSpeech.SpeechManager;
+using TextToSpeech.Utility;
+using TextToSpeech.Views;
 
-namespace TextToSpeechV3.ViewModels
+namespace TextToSpeech.ViewModels
 {
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{

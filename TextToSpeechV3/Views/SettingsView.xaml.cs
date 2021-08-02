@@ -9,11 +9,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using TextToSpeechV3.Model;
-using TextToSpeechV3.SpeechManager;
-using TextToSpeechV3.ViewModels;
+using TextToSpeech.Model;
+using TextToSpeech.SpeechManager;
+using TextToSpeech.ViewModels;
 
-namespace TextToSpeechV3.Views
+namespace TextToSpeech.Views
 {
 	/// <summary>
 	/// Interaction logic for SettingsView.xaml

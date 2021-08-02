@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TextToSpeechV3.Model;
+using TextToSpeech.Model;
 
-namespace TextToSpeechV3.SpeechManager
+namespace TextToSpeech.SpeechManager
 {
 	static class SpeechManagerFactory
 	{

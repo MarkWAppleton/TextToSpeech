@@ -9,10 +9,10 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using TextToSpeechV3.Model;
-using TextToSpeechV3.Views;
+using TextToSpeech.Model;
+using TextToSpeech.Views;
 
-namespace TextToSpeechV3.ViewModels
+namespace TextToSpeech.ViewModels
 {
 	public class SnippingToolViewModel : INotifyPropertyChanged
 	{

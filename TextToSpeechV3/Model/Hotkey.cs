@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
-using TextToSpeechV3.Hotkeys;
+using TextToSpeech.Hotkeys;
 
-namespace TextToSpeechV3.Model
+namespace TextToSpeech.Model
 {
 	public class Hotkey
 	{

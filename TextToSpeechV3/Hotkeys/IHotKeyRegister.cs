@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TextToSpeechV3.Hotkeys
+namespace TextToSpeech.Hotkeys
 {
 	public interface IHotKeyRegister
 	{

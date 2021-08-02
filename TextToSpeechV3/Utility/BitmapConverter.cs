@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace TextToSpeechV3.Utility
+namespace TextToSpeech.Utility
 {
 	public static class BitmapConverter
 	{

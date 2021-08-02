@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tesseract;
-using TextToSpeechV3.Services.Interfaces;
+using TextToSpeech.Services.Interfaces;
 
-namespace TextToSpeechV3.Services
+namespace TextToSpeech.Services
 {
 	public class TesseractOcrEngine : IOcrEngine
 	{

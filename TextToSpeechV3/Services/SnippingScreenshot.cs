@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tesseract;
-using TextToSpeechV3.Services.Interfaces;
-using TextToSpeechV3.Model;
-using TextToSpeechV3.Views;
+using TextToSpeech.Services.Interfaces;
+using TextToSpeech.Model;
+using TextToSpeech.Views;
 
-namespace TextToSpeechV3.Services
+namespace TextToSpeech.Services
 {
 	public class SnippingScreenshot : ISnippingScreenshot
 	{

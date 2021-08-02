@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using TextToSpeechV3.Services.Interfaces;
+using TextToSpeech.Services.Interfaces;
 
-namespace TextToSpeechV3.Services
+namespace TextToSpeech.Services
 {
 	public class CopyTextFromScreenService : ICopyTextFromScreenService
 	{

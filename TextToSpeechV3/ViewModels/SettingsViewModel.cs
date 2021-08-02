@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using TextToSpeechV3.Model;
-using TextToSpeechV3.SpeechManager;
-using TextToSpeechV3.Utility;
+using TextToSpeech.Model;
+using TextToSpeech.SpeechManager;
+using TextToSpeech.Utility;
 using System.Text.Json;
-using TextToSpeechV3.Views;
-using TextToSpeechV3.Hotkeys;
+using TextToSpeech.Views;
+using TextToSpeech.Hotkeys;
 using System.Windows;
 
-namespace TextToSpeechV3.ViewModels
+namespace TextToSpeech.ViewModels
 {
 	public class SettingsViewModel : INotifyPropertyChanged
 	{

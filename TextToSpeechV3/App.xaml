@@ -1,7 +1,7 @@
-﻿<Application x:Class="TextToSpeechV3.App"
+﻿<Application x:Class="TextToSpeech.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TextToSpeechV3"
+             xmlns:local="clr-namespace:TextToSpeech"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
          

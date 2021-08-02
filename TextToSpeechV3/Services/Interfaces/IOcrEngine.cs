@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextToSpeechV3.Services.Interfaces
+namespace TextToSpeech.Services.Interfaces
 {
 	public interface IOcrEngine
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TextToSpeechV3.SpeechManager
+namespace TextToSpeech.SpeechManager
 {
 	public enum EnumSpeechEngine
 	{

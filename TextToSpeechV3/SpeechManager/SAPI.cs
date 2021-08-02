@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using SpeechLib;
 using System.Linq;
 using System.Threading;
-using TextToSpeechV3.Model;
+using TextToSpeech.Model;
 
-namespace TextToSpeechV3.SpeechManager
+namespace TextToSpeech.SpeechManager
 {
 	public class SAPI : ISpeechManager
 	{

@@ -15,12 +15,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TextToSpeechV3.Hotkeys;
-using TextToSpeechV3.SpeechManager;
-using TextToSpeechV3.ViewModels;
+using TextToSpeech.Hotkeys;
+using TextToSpeech.SpeechManager;
+using TextToSpeech.ViewModels;
 using MessageBox = System.Windows.MessageBox;
 
-namespace TextToSpeechV3.Views
+namespace TextToSpeech.Views
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TextToSpeechV3.SpeechManager;
-using TextToSpeechV3.Utility;
+using TextToSpeech.SpeechManager;
+using TextToSpeech.Utility;
 
-namespace TextToSpeechV3.Model
+namespace TextToSpeech.Model
 {
 	public class SpeechSettings
 	{

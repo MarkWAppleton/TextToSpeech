@@ -5,9 +5,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using TextToSpeechV3.Model;
+using TextToSpeech.Model;
 
-namespace TextToSpeechV3.Hotkeys
+namespace TextToSpeech.Hotkeys
 {
 	public class HotKeyRegister : IHotKeyRegister
 	{

@@ -5,9 +5,9 @@
 //using System.Linq;
 //using System.Text;
 //using System.Threading.Tasks;
-//using TextToSpeechV3.Services.Interfaces;
+//using TextToSpeech.Services.Interfaces;
 
-//namespace TextToSpeechV3.Services
+//namespace TextToSpeech.Services
 //{
 //	/// <summary>
 //	/// Designed to work with https://github.com/shimat/opencvsharp however results didn't improve.

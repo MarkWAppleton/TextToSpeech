@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TextToSpeechV3.Model;
+using TextToSpeech.Model;
 
-namespace TextToSpeechV3.SpeechManager
+namespace TextToSpeech.SpeechManager
 {
 	public interface ISpeechManager
 	{

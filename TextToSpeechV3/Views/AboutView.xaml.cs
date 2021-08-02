@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TextToSpeechV3.Views
+namespace TextToSpeech.Views
 {
 	/// <summary>
 	/// Interaction logic for AboutView.xaml

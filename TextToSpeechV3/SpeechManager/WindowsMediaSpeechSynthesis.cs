@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TextToSpeechV3.Model;
+using TextToSpeech.Model;
 using Windows.Media.Playback;
 using Windows.Media.SpeechSynthesis;
 
-namespace TextToSpeechV3.SpeechManager
+namespace TextToSpeech.SpeechManager
 {
 	public class WindowsMediaSpeechSynthesis : ISpeechManager
 	{
