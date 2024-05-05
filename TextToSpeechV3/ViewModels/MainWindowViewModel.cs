@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TextToSpeech.Hotkeys;
 using TextToSpeech.Model;
 using TextToSpeech.Services;
+using TextToSpeech.Services.ImagePrcessingStages;
 using TextToSpeech.Services.Interfaces;
 using TextToSpeech.SpeechManager;
 using TextToSpeech.Utility;
@@ -24,11 +20,12 @@ namespace TextToSpeech.ViewModels
 	{
 		#region PRIVATE PROPERTIES
 		private ISpeechManager _speechManager;
-		private IHotKeyRegister _speakHotKey;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
 		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 		private IOcrEngine _ocrEngine = new TesseractOcrEngine();
 		private IImageProcessingService _imageProcessingService = new SimpleResizeImageProcessingService();
+		private ISetScreenshotLocation _setScreenshotLocation = new SetScreenshotLocation();
+		private ICreateBitmapService _createBitmapService = new CreateBitmapService();
 		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();
 		private MainWindow _mainWindow;
 		#endregion
@@ -46,9 +43,11 @@ namespace TextToSpeech.ViewModels
 		#region COMMANDS
 
 		private RelayCommand<object> _settingsButtonCommand;
+		private RelayCommand<object> _imageProcessingSettingsButtonCommand;
 		private RelayCommand<object> _aboutCommand;
 		private RelayCommand<object> _clostCommand;
 		public RelayCommand<object> SettingsButtonCommand { get { return _settingsButtonCommand; } }
+		public RelayCommand<object> ImageProcessingSettingsButtonCommand { get { return _imageProcessingSettingsButtonCommand; } }
 		public RelayCommand<object> AboutCommand { get { return _aboutCommand; } }
 		public RelayCommand<object> ClostCommand { get { return _clostCommand; } }
 
@@ -60,25 +59,22 @@ namespace TextToSpeech.ViewModels
 			_mainWindow = mainWindow;
 			Images = new ObservableCollection<BitmapImage>();
 			string speechSettingsJson = Properties.Settings.Default.SpeechSettings;
-			if (string.IsNullOrWhiteSpace(speechSettingsJson))
-			{
-				Settings = new SpeechSettings();
-				Settings.Rate = 1.6;
-				Settings.Volume = 1;
-				Settings.Voice = "";
-				Settings.Engine = EnumSpeechEngine.Legacy;
-			}
-			else
-			{
-				Settings = JsonSerializer.Deserialize<SpeechSettings>(speechSettingsJson);
-			}
+			Settings = JsonUtility.DeserializeOrDefault(speechSettingsJson,
+				new SpeechSettings()
+				{
+					Rate = 1.6,
+					Volume = 1,
+					Voice = "",
+					Engine = EnumSpeechEngine.Legacy,
+				});
 			
 			_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings);
 
 			AddSupportedHotkeys(Settings);
-			RegisterHotkeys();
+			RegisterAllHotkeys();
 
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
+			_imageProcessingSettingsButtonCommand = new RelayCommand<object>(ImageProcessingSettingsButtonCommandMethod);
 			_aboutCommand = new RelayCommand<object>(AboutCommandMethod);
 			_clostCommand = new RelayCommand<object>(CloseCommandMethod);
 		}
@@ -118,11 +114,12 @@ namespace TextToSpeech.ViewModels
 				//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
 
 				List<Bitmap> imageProcessing;
-				Bitmap processed = _imageProcessingService.ProcessImage(snippingResult, out imageProcessing);
+				Bitmap processed = _imageProcessingService.ProcessImage(snippingResult);
 				//imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
 				//OnPropertyChanged(nameof(Image));
+				//string orcResult = _ocrEngine.RunOcr(processed);
 
-				string orcResult = _ocrEngine.RunOcr(processed);
+				string orcResult = _ocrEngine.RunOcr(snippingResult);
 				string unescapedText = Regex.Unescape(orcResult);
 				string processedText = unescapedText.Replace("\n", " ");
 				_speechManager.SpeakText(processedText);
@@ -133,7 +130,25 @@ namespace TextToSpeech.ViewModels
 			}
 		}
 
-		public void SettingsButtonCommandMethod(object nothing)
+		public void SetScreenshotLocationHotkeyMethod(object sender, EventArgs e)
+		{
+			_setScreenshotLocation.SetScreenshotLocation();
+		}
+
+		public void ReadScreenshotHotkeyMethod(object sender, EventArgs e)
+		{
+			string screenshotLocationJson = Properties.Settings.Default.ScreenshotSettings;
+			if(JsonUtility.TryDeserialize(screenshotLocationJson, out ObjectPositionAndSize screenshotLocation))
+			{
+				Bitmap image = _createBitmapService.CreateBitmap(screenshotLocation.ToRectangle());
+				string orcResult = _ocrEngine.RunOcr(image);
+				string unescapedText = Regex.Unescape(orcResult);
+				string processedText = unescapedText.Replace("\n", " ");
+				_speechManager.SpeakText(processedText);
+			}
+		}
+
+		public void SettingsButtonCommandMethod(object _)
 		{
 			SettingsView settingsView = new SettingsView(Settings);
 			settingsView.ShowDialog();
@@ -145,9 +160,26 @@ namespace TextToSpeech.ViewModels
 
 			UnregisterHotkeys();
 			_speechManager.SetAllSettings(Settings);
-			RegisterHotkeys();
+			RegisterAllHotkeys();
 			OnPropertyChanged(nameof(Settings));
 		}
+
+		public void ImageProcessingSettingsButtonCommandMethod(object _)
+		{
+			ImageProcessingSettingsView imageProcessingSettingsView = new ImageProcessingSettingsView();
+			imageProcessingSettingsView.ShowDialog();
+			//if (settingsView.SpeechSettings == null)
+			//{
+			//	return;
+			//}
+			//Settings = settingsView.SpeechSettings;
+
+			//UnregisterHotkeys();
+			//_speechManager.SetAllSettings(Settings);
+			//RegisterAllHotkeys();
+			//OnPropertyChanged(nameof(Settings));
+		}
+
 		public void AboutCommandMethod(object nothing)
 		{
 			new AboutView().ShowDialog();
@@ -166,6 +198,8 @@ namespace TextToSpeech.ViewModels
 		{
 			CheckAndAddHotKey(settings, EnumFeature.Speak, new Hotkey(Keys.NumPad9, Modifiers.Control));
 			CheckAndAddHotKey(settings, EnumFeature.InstantScreenshot, new Hotkey(Keys.NumPad8, Modifiers.Control));
+			CheckAndAddHotKey(settings, EnumFeature.SetScreenshotLocation, new Hotkey(Keys.NumPad5, Modifiers.Control));
+			CheckAndAddHotKey(settings, EnumFeature.SpeakScreenshot, new Hotkey(Keys.NumPad6, Modifiers.Control));
 		}
 
 		private void CheckAndAddHotKey(SpeechSettings settings, EnumFeature feature, Hotkey hotkey)
@@ -176,17 +210,20 @@ namespace TextToSpeech.ViewModels
 			}
 		}
 
-		private void RegisterHotkeys()
+		private void RegisterAllHotkeys()
 		{
-			Hotkey speakHotkey = Settings.Hotkeys[EnumFeature.Speak];
-			IHotKeyRegister speakHotkeyRegister = new HotKeyRegister(_mainWindow, speakHotkey);
-			speakHotkeyRegister.HotkeyTriggered += SpeakHotKeyMethod;
-			_activeHotkeys.Add(EnumFeature.Speak, speakHotkeyRegister);
+			RegisterHotkey(EnumFeature.Speak, SpeakHotKeyMethod);
+			RegisterHotkey(EnumFeature.InstantScreenshot, InstantScreenshotHotkeyMethod);
+			RegisterHotkey(EnumFeature.SetScreenshotLocation, SetScreenshotLocationHotkeyMethod);
+			RegisterHotkey(EnumFeature.SpeakScreenshot, ReadScreenshotHotkeyMethod);
+		}
 
-			Hotkey instanceScreenshotHotkey = Settings.Hotkeys[EnumFeature.InstantScreenshot];
-			IHotKeyRegister instanceScreenshotHotkeyRegister = new HotKeyRegister(_mainWindow, instanceScreenshotHotkey);
-			instanceScreenshotHotkeyRegister.HotkeyTriggered += InstantScreenshotHotkeyMethod;
-			_activeHotkeys.Add(EnumFeature.InstantScreenshot, instanceScreenshotHotkeyRegister);
+		private void RegisterHotkey(EnumFeature feature, EventHandler eventHandler)
+		{
+			Hotkey hotkey = Settings.Hotkeys[feature];
+			IHotKeyRegister hotkeyRegister = new HotKeyRegister(_mainWindow, hotkey);
+			hotkeyRegister.HotkeyTriggered += eventHandler;
+			_activeHotkeys.Add(feature, hotkeyRegister);
 		}
 
 		private void UnregisterHotkeys()

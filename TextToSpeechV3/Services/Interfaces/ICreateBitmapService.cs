@@ -4,12 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TextToSpeech.Model.ImagePrcessing;
 
 namespace TextToSpeech.Services.Interfaces
 {
-	public interface IImageProcessingService
+	public interface ICreateBitmapService
 	{
-		Bitmap ProcessImage(Bitmap original, IImageProcessingConfig? config = null);
+		Bitmap CreateBitmap(Rectangle screenLocation);
 	}
 }

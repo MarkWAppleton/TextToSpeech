@@ -1,0 +1,107 @@
+﻿<Window x:Class="TextToSpeech.Views.ImageProcessingSettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:converters="clr-namespace:TextToSpeech.Utility.Converters"
+		xmlns:uc="clr-namespace:TextToSpeech.Views.UserControlls"
+		xmlns:ipservices="clr-namespace:TextToSpeech.Services.ImagePrcessingStages"
+        mc:Ignorable="d"
+        Title="SettingsView" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<converters:BitmapConverter x:Key="BitmapConverter" />
+	</Window.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="250"/>
+			<ColumnDefinition Width="auto"/>
+		</Grid.ColumnDefinitions>
+
+		<ScrollViewer Grid.Column="0">
+			<ItemsControl ItemsSource="{Binding ImageBitmapList}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Image Source="{Binding Converter={StaticResource BitmapConverter}}" Margin="5"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+
+		<ScrollViewer Grid.Column="1">
+			<ItemsControl ItemsSource="{Binding ImageProcessingPipeline}">
+				<ItemsControl.Resources>
+					<DataTemplate DataType="{x:Type ipservices:GrayScaleImageProcessingService}">
+						<uc:GrayScaleImageProcessingConfigView/>
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type ipservices:GaussianBlurImageProcessingService}">
+						<uc:GaussianBlurImageProcessingConfigView />
+					</DataTemplate>
+				</ItemsControl.Resources>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border BorderBrush="Black" BorderThickness="0,1,0,1">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="15"/>
+								</Grid.ColumnDefinitions>
+
+								<ContentControl Grid.Column="0" Content="{Binding}"/>
+
+								<StackPanel Grid.Column="1">
+									<Button Content="↑"
+											Command="{Binding DataContext.MoveUpStageInImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+											CommandParameter="{Binding}"/>
+									<Button Content="X" 
+											Command="{Binding DataContext.DeleteStageFromImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+											CommandParameter="{Binding}"/>
+									<Button Content="↓"
+											Command="{Binding DataContext.MoveDownStageInImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+											CommandParameter="{Binding}"/>
+								</StackPanel>
+
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+
+		<Grid Grid.Column="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+			<Button x:Name="btnTakeScreenshot" Grid.Row="0" Content="Take Screenshot" Command="{Binding Path=TakeScreenshotButtonCommand}"/>
+			<StackPanel Grid.Row="1">
+				<Label Content="Add processed stage" />
+				<ItemsControl ItemsSource="{Binding ImageProcessingStages}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Button 
+								Content="{Binding}" 
+								Command="{Binding DataContext.AddStageToImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+								CommandParameter="{Binding}"
+								/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+
+			<Button x:Name="btnRunPipeline" Grid.Row="3" Content="ProcessImage" Command="{Binding Path=RunPipelineButtonCommand}"/>
+		</Grid>
+	</Grid>
+</Window>

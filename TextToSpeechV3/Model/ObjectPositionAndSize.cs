@@ -14,10 +14,14 @@ namespace TextToSpeech.Model
 		public double Width { get; set; }
 		public double Height { get; set; }
 
-		public ObjectPositionAndSize(double xCoord, double yCoord, double width, double height)
+		public ObjectPositionAndSize(
+			double xCoordinate, 
+			double yCoordinate, 
+			double width, 
+			double height)
 		{
-			XCoordinate = xCoord;
-			YCoordinate = yCoord;
+			XCoordinate = xCoordinate;
+			YCoordinate = yCoordinate;
 			Width = width;
 			Height = height;
 		}

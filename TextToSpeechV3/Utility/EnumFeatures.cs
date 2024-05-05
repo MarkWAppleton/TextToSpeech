@@ -7,6 +7,8 @@ namespace TextToSpeech.Utility
 	public enum EnumFeature
 	{
 		Speak,
-		InstantScreenshot
+		InstantScreenshot,
+		SetScreenshotLocation,
+		SpeakScreenshot,
 	}
 }

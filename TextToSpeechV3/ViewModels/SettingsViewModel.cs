@@ -147,7 +147,7 @@ namespace TextToSpeech.ViewModels
 
 		#region PUBLIC METHODS
 
-		public void SpeechTestButtonCommandMethod(string nothing)
+		public void SpeechTestButtonCommandMethod(string _)
 		{
 			try
 			{
@@ -168,12 +168,12 @@ namespace TextToSpeech.ViewModels
 			}
 		}
 
-		public void CancelButtonCommandMethod(string nothing)
+		public void CancelButtonCommandMethod(string _)
 		{
 			CloseAction();
 		}
 
-		public void OkButtonCommandMethod(string nothing)
+		public void OkButtonCommandMethod(string _)
 		{
 			if (!Validate())
 			{
@@ -186,7 +186,7 @@ namespace TextToSpeech.ViewModels
 			CloseAction();
 		}
 
-		public void ApplyButtonCommandMethod(string nothing)
+		public void ApplyButtonCommandMethod(string _)
 		{
 			if (!Validate())
 			{

@@ -26,7 +26,7 @@
 				</GridView>
 			</ListView.View>
 		</ListView>
-		<ListView Grid.Row="3" ItemsSource="{Binding Images}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+		<!--<ListView Grid.Row="3" ItemsSource="{Binding Images}" ScrollViewer.VerticalScrollBarVisibility="Auto">
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<StackPanel>
@@ -34,7 +34,7 @@
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
-		</ListView>
+		</ListView>-->
 
 		<Image Source="{Binding NotiftIcon}" />
 
@@ -42,6 +42,7 @@
 			<tb:TaskbarIcon.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="Settings" Command="{Binding SettingsButtonCommand}" />
+					<MenuItem Header="ImageProcessing" Command="{Binding ImageProcessingSettingsButtonCommand}" />
 					<MenuItem Header="About" Command="{Binding AboutCommand}"/>
 					<MenuItem Header="Exit" Command="{Binding ClostCommand}"/>
 				</ContextMenu>

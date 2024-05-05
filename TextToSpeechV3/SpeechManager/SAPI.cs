@@ -13,7 +13,6 @@ namespace TextToSpeech.SpeechManager
 	{
 		private SpVoice _spVoice;
 		private bool _isSpeaking;
-		private CancellationTokenSource _cancellationTokenSource;
 
 		public EnumSpeechEngine EngineType => EnumSpeechEngine.Legacy;
 		public bool IsSpeaking => _isSpeaking;
