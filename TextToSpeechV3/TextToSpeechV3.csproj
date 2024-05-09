@@ -72,8 +72,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\UserControlls\" />
-  </ItemGroup>
-
 </Project>

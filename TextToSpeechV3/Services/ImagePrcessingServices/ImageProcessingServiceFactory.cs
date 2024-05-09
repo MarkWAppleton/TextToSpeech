@@ -8,7 +8,7 @@ using TextToSpeech.Utility;
 
 namespace TextToSpeech.Services.ImagePrcessingStages
 {
-	public static class ImageProcessingStageFactory
+	public static class ImageProcessingServiceFactory
 	{
 		public static IImageProcessingService CreateService(EnumImageProcessingStages enumImageProcessingStages) =>
 			enumImageProcessingStages switch

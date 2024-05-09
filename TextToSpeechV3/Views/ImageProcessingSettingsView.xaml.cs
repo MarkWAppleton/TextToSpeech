@@ -19,7 +19,6 @@ namespace TextToSpeech.Views
 				vm.CloseAction = new Action(this.Close);
 			}
 			InitializeComponent();
-			Border border = new Border();
 		}
 	}
 }

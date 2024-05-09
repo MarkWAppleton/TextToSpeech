@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:converters="clr-namespace:TextToSpeech.Utility.Converters"
+		xmlns:local="clr-namespace:TextToSpeech.Views"
 		xmlns:uc="clr-namespace:TextToSpeech.Views.UserControlls"
 		xmlns:ipservices="clr-namespace:TextToSpeech.Services.ImagePrcessingStages"
         mc:Ignorable="d"
@@ -39,9 +40,10 @@
 					<DataTemplate DataType="{x:Type ipservices:GrayScaleImageProcessingService}">
 						<uc:GrayScaleImageProcessingConfigView/>
 					</DataTemplate>
-					<DataTemplate DataType="{x:Type ipservices:GaussianBlurImageProcessingService}">
-						<uc:GaussianBlurImageProcessingConfigView />
-					</DataTemplate>
+					<!--<DataTemplate DataType="{x:Type ipservices:GaussianBlurImageProcessingService}">
+						--><!--<uc:GaussianBlurImageProcessingConfigView DataContext="{Binding}" ServiceConfig="{Binding ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />--><!--
+						<uc:GaussianBlurImageProcessingConfigView DataContext="{Binding}" ServiceConfig="{Binding ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+					</DataTemplate>-->
 				</ItemsControl.Resources>
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -57,7 +59,10 @@
 									<ColumnDefinition Width="15"/>
 								</Grid.ColumnDefinitions>
 
-								<ContentControl Grid.Column="0" Content="{Binding}"/>
+								<!--ContentControl Grid.Column="0" Content="{Binding ImageProcessingService}"/>-->
+								<!--<uc:GaussianBlurImageProcessingConfigView ServiceConfig="{Binding ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />-->
+								<uc:GaussianBlurImageProcessingConfigView ServiceConfig="{Binding DataContext.ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+
 
 								<StackPanel Grid.Column="1">
 									<Button Content="↑"
@@ -101,7 +106,12 @@
 				</ItemsControl>
 			</StackPanel>
 
-			<Button x:Name="btnRunPipeline" Grid.Row="3" Content="ProcessImage" Command="{Binding Path=RunPipelineButtonCommand}"/>
+			<StackPanel Grid.Row="3">
+				<Button x:Name="btnRunPipeline" Grid.Row="3" Content="ProcessImage" Command="{Binding Path=RunPipelineButtonCommand}"/>
+				<!--<uc:GaussianBlurImageProcessingConfigView ServiceConfig="{Binding DataContext.TestConfig, RelativeSource={RelativeSource AncestorType={x:Type local:ImageProcessingSettingsView}}}" />-->
+
+				<!--<uc:GaussianBlurImageProcessingConfigView UserControlProperty="{Binding DataContext.TestConfig, RelativeSource={RelativeSource AncestorType={x:Type local:ImageProcessingSettingsView}}}" />-->
+			</StackPanel>
 		</Grid>
 	</Grid>
 </Window>

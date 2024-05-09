@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TextToSpeech.Model.ImagePrcessing;
+using TextToSpeech.Services.ImagePrcessingStages;
+using TextToSpeech.Services.Interfaces;
+using TextToSpeech.Utility;
+
+namespace TextToSpeech.Services.ImagePrcessingServices
+{
+	public static class ImageProcessingConfigFactory
+	{
+		public static IImageProcessingConfig CreateConfig(EnumImageProcessingStages enumImageProcessingStages) =>
+			enumImageProcessingStages switch
+			{
+				EnumImageProcessingStages.GrayScale => new GrayScaleImageProcessingConfig(),
+				EnumImageProcessingStages.GaussianBlur => new GaussianBlurImageProcessingConfig(),
+				EnumImageProcessingStages.MedianBlur => new MedianBlurImageProcessingConfig(),
+				EnumImageProcessingStages.Threshholding => new ThresholdingImageProcessingConfig(),
+				_ => throw new NotSupportedException(),
+			};
+	}
+}

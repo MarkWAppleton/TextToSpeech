@@ -9,8 +9,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
+using TextToSpeech.Model.ImagePrcessing;
 using TextToSpeech.Properties;
 using TextToSpeech.Services;
+using TextToSpeech.Services.ImagePrcessingServices;
 using TextToSpeech.Services.ImagePrcessingStages;
 using TextToSpeech.Services.Interfaces;
 using TextToSpeech.Utility;
@@ -28,7 +30,8 @@ namespace TextToSpeech.ViewModels
 		private ImageProcessingSettingsView _view;
 		private Bitmap _imageBitmap;
 		private ObservableCollection<Bitmap> _imageBitmapList = new ObservableCollection<Bitmap>();
-		private List<IImageProcessingService> _imageProcessingPipeline = new List<IImageProcessingService>();
+		private List<ImageProcessingStage> _imageProcessingPipeline = new List<ImageProcessingStage>();
+		private GaussianBlurImageProcessingConfig _config;
 
 		private readonly ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 
@@ -38,13 +41,12 @@ namespace TextToSpeech.ViewModels
 		public Action CloseAction { get; set; }
 		public Bitmap ImageBitmap { get { return _imageBitmap; } private set { _imageBitmap = value; OnPropertyChanged(nameof(ImageBitmap)); } }
 		public ObservableCollection<Bitmap> ImageBitmapList { get { return _imageBitmapList; } private set { _imageBitmapList = value; OnPropertyChanged(nameof(ImageBitmapList)); } }
-		public ObservableCollection<IImageProcessingService> ImageProcessingPipeline { 
+		public ObservableCollection<ImageProcessingStage> ImageProcessingPipeline { 
 			get
 			{	
-				var x = new ObservableCollection<IImageProcessingService>(_imageProcessingPipeline);
+				var x = new ObservableCollection<ImageProcessingStage>(_imageProcessingPipeline);
 				return x;
 			}
-			private set { _imageProcessingPipeline = value.ToList(); OnPropertyChanged(nameof(ImageProcessingPipeline)); }
 		}
 		public ObservableCollection<EnumImageProcessingStages> ImageProcessingStages { 
 			get 
@@ -52,21 +54,24 @@ namespace TextToSpeech.ViewModels
 				return new ObservableCollection<EnumImageProcessingStages>(Enum.GetValues(typeof(EnumImageProcessingStages)).Cast<EnumImageProcessingStages>()); 
 			} 
 		}
+
+		public GaussianBlurImageProcessingConfig TestConfig { get { return _config; } set { _config = value; OnPropertyChanged(nameof(TestConfig)); } }
+		//public string TestConfig { get { return "TestString987654321"; } }
 		#endregion
 
 		#region COMMANDS
 		private RelayCommand<string> _takeScreenshotButtonCommand;
 		private RelayCommand<string> _runPipelineButtonCommand;
 		private RelayCommand<EnumImageProcessingStages> _addStageToImageProcessingPipeline;
-		private RelayCommand<IImageProcessingService> _deleteStageFromImageProcessingPipeline;
-		private RelayCommand<IImageProcessingService> _moveUpStageInImageProcessingPipeline;
-		private RelayCommand<IImageProcessingService> _moveDownStageInImageProcessingPipeline;
+		private RelayCommand<ImageProcessingStage> _deleteStageFromImageProcessingPipeline;
+		private RelayCommand<ImageProcessingStage> _moveUpStageInImageProcessingPipeline;
+		private RelayCommand<ImageProcessingStage> _moveDownStageInImageProcessingPipeline;
 		public RelayCommand<string> TakeScreenshotButtonCommand { get { return _takeScreenshotButtonCommand; } }
 		public RelayCommand<string> RunPipelineButtonCommand { get { return _runPipelineButtonCommand; } }
 		public RelayCommand<EnumImageProcessingStages> AddStageToImageProcessingPipeline { get { return _addStageToImageProcessingPipeline; } }
-		public RelayCommand<IImageProcessingService> DeleteStageFromImageProcessingPipeline { get { return _deleteStageFromImageProcessingPipeline; } }
-		public RelayCommand<IImageProcessingService> MoveUpStageInImageProcessingPipeline { get { return _moveUpStageInImageProcessingPipeline; } }
-		public RelayCommand<IImageProcessingService> MoveDownStageInImageProcessingPipeline { get { return _moveDownStageInImageProcessingPipeline; } }
+		public RelayCommand<ImageProcessingStage> DeleteStageFromImageProcessingPipeline { get { return _deleteStageFromImageProcessingPipeline; } }
+		public RelayCommand<ImageProcessingStage> MoveUpStageInImageProcessingPipeline { get { return _moveUpStageInImageProcessingPipeline; } }
+		public RelayCommand<ImageProcessingStage> MoveDownStageInImageProcessingPipeline { get { return _moveDownStageInImageProcessingPipeline; } }
 		#endregion
 
 		#region CONSTRUTORS
@@ -76,10 +81,10 @@ namespace TextToSpeech.ViewModels
 			_takeScreenshotButtonCommand = new RelayCommand<string>(TakeScreenshotButtonCommandMethod);
 			_runPipelineButtonCommand = new RelayCommand<string>(RunPipelineButtonCommandMethod);
 			_addStageToImageProcessingPipeline = new RelayCommand<EnumImageProcessingStages>(AddStageToImageProcessingPipelineMethod);
-			_deleteStageFromImageProcessingPipeline = new RelayCommand<IImageProcessingService>(DeleteStageFromImageProcessingPipelineDeleteMethod);
-			_deleteStageFromImageProcessingPipeline = new RelayCommand<IImageProcessingService>(DeleteStageFromImageProcessingPipelineDeleteMethod);
-			_moveUpStageInImageProcessingPipeline = new RelayCommand<IImageProcessingService>(MoveUpStageInImageProcessingPipelineMethod);
-			_moveDownStageInImageProcessingPipeline = new RelayCommand<IImageProcessingService>(MoveDownStageInImageProcessingPipelineMethod);
+			_deleteStageFromImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(DeleteStageFromImageProcessingPipelineDeleteMethod);
+			_deleteStageFromImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(DeleteStageFromImageProcessingPipelineDeleteMethod);
+			_moveUpStageInImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(MoveUpStageInImageProcessingPipelineMethod);
+			_moveDownStageInImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(MoveDownStageInImageProcessingPipelineMethod);
 		}
 		#endregion
 
@@ -95,30 +100,35 @@ namespace TextToSpeech.ViewModels
 		{
 			Bitmap processedImage = _imageBitmap;
 			ImageBitmapList.Clear();
+			ImageBitmapList.Add(_imageBitmap);
 			_imageProcessingPipeline.ForEach(step =>
 			{
-				processedImage = step.ProcessImage(processedImage);
+				processedImage = step.ImageProcessingService.ProcessImage(processedImage, step.ImageProcessingConfig);
 				ImageBitmapList.Add(processedImage);
 			});
 		}
 
 		public void AddStageToImageProcessingPipelineMethod(EnumImageProcessingStages newStage)
 		{
-			_imageProcessingPipeline.Add(ImageProcessingStageFactory.CreateService(newStage));
+			_imageProcessingPipeline.Add(new ImageProcessingStage()
+			{
+				ImageProcessingService = ImageProcessingServiceFactory.CreateService(newStage),
+				ImageProcessingConfig = ImageProcessingConfigFactory.CreateConfig(newStage),
+			});
 			OnPropertyChanged(nameof(ImageProcessingPipeline));
 		}
-		public void DeleteStageFromImageProcessingPipelineDeleteMethod(IImageProcessingService toDelete)
+		public void DeleteStageFromImageProcessingPipelineDeleteMethod(ImageProcessingStage toDelete)
 		{
 			_imageProcessingPipeline.Remove(toDelete);
 			OnPropertyChanged(nameof(ImageProcessingPipeline));
 		}
-		public void MoveUpStageInImageProcessingPipelineMethod(IImageProcessingService toMoveUp)
+		public void MoveUpStageInImageProcessingPipelineMethod(ImageProcessingStage toMoveUp)
 		{
 			int oldIndex = _imageProcessingPipeline.IndexOf(toMoveUp);
 			_imageProcessingPipeline.MoveItem(toMoveUp, --oldIndex);
 			OnPropertyChanged(nameof(ImageProcessingPipeline));
 		}
-		public void MoveDownStageInImageProcessingPipelineMethod(IImageProcessingService toMoveDown)
+		public void MoveDownStageInImageProcessingPipelineMethod(ImageProcessingStage toMoveDown)
 		{
 			int oldIndex = _imageProcessingPipeline.IndexOf(toMoveDown);
 			_imageProcessingPipeline.MoveItem(toMoveDown, ++oldIndex);

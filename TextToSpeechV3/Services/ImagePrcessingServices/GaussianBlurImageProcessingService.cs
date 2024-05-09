@@ -28,7 +28,7 @@ namespace TextToSpeech.Services.ImagePrcessingStages
 
 			// Apply Gaussian blur
 			Mat gaussianBlurredMat = new Mat();
-			Cv2.GaussianBlur(originalMat, gaussianBlurredMat, new Size(innerConfig.Width, innerConfig.Height), sigmaX: innerConfig.sigmaX, sigmaY: innerConfig.SigmaY);
+			Cv2.GaussianBlur(originalMat, gaussianBlurredMat, new Size(innerConfig.Width, innerConfig.Height), sigmaX: innerConfig.SigmaX, sigmaY: innerConfig.SigmaY);
 
 			// Convert the Mat back to Bitmap
 			return gaussianBlurredMat.ToBitmap();

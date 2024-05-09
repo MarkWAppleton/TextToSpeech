@@ -23,6 +23,11 @@ namespace TextToSpeech.Services.ImagePrcessingStages
 			// Convert System.Drawing.Bitmap to OpenCvSharp's Mat
 			Mat originalMat = original.ToMat();
 
+			if(originalMat.Channels() == 1)
+			{
+				return originalMat.ToBitmap();
+			}
+
 			// Convert the image to grayscale
 			Mat grayMat = new Mat();
 			Cv2.CvtColor(originalMat, grayMat, ColorConversionCodes.BGR2GRAY);

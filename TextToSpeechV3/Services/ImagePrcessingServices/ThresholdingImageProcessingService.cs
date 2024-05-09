@@ -15,21 +15,29 @@ namespace TextToSpeech.Services.ImagePrcessingStages
 	{
 		public Bitmap ProcessImage(Bitmap original,IImageProcessingConfig? config = null)
 		{
-			// Convert System.Drawing.Bitmap to OpenCvSharp's Mat
-			Mat originalMat = original.ToMat();
+			try
+			{
+				// Convert System.Drawing.Bitmap to OpenCvSharp's Mat
+				Mat originalMat = original.ToMat();
 
-			// Apply Gaussian blur
-			Mat thresholdedMat = new Mat();
+				// Apply Gaussian blur
+				Mat thresholdedMat = new Mat();
 
-			/*
-			 * Adjusting the thresholding parameters and choosing the appropriate thresholding method can help enhance the visibility of text in the image.
-			 * You might need to experiment with different thresholding methods and parameters to achieve the best results for your specific images.
-			 */
+				/*
+				 * Adjusting the thresholding parameters and choosing the appropriate thresholding method can help enhance the visibility of text in the image.
+				 * You might need to experiment with different thresholding methods and parameters to achieve the best results for your specific images.
+				 */
 
-			Cv2.Threshold(originalMat, thresholdedMat, thresh: 0, maxval: 255, type: ThresholdTypes.Binary | ThresholdTypes.Otsu);
+				Cv2.Threshold(originalMat, thresholdedMat, thresh: 0, maxval: 255, type: ThresholdTypes.Binary | ThresholdTypes.Otsu);
 
-			// Convert the Mat back to Bitmap
-			return thresholdedMat.ToBitmap();
+				// Convert the Mat back to Bitmap
+				return thresholdedMat.ToBitmap();
+			}
+			catch 
+			{ 
+				//TODO log
+				return original;
+			}
 		}
 	}
 }
