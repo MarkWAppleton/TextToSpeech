@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextToSpeech.Model.ImagePrcessing
+﻿namespace TextToSpeech.Model.ImagePrcessing
 {
 	public record MedianBlurImageProcessingConfig : IImageProcessingConfig
 	{

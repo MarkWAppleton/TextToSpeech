@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-using TextToSpeech.Hotkeys;
+﻿using TextToSpeech.Hotkeys;
 
 namespace TextToSpeech.Model
 {

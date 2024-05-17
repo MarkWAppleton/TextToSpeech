@@ -113,7 +113,7 @@ namespace TextToSpeech.ViewModels
 
 				//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
 
-				List<Bitmap> imageProcessing;
+				//List<Bitmap> imageProcessing;
 				Bitmap processed = _imageProcessingService.ProcessImage(snippingResult);
 				//imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
 				//OnPropertyChanged(nameof(Image));

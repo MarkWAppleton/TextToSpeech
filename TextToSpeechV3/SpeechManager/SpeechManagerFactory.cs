@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TextToSpeech.Model;
+﻿using TextToSpeech.Model;
 
 namespace TextToSpeech.SpeechManager
 {

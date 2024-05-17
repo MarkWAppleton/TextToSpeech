@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:converters="clr-namespace:TextToSpeech.Utility.Converters"
-		xmlns:local="clr-namespace:TextToSpeech.Views"
-		xmlns:uc="clr-namespace:TextToSpeech.Views.UserControlls"
-		xmlns:ipservices="clr-namespace:TextToSpeech.Services.ImagePrcessingStages"
         mc:Ignorable="d"
         Title="SettingsView" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
 	<Window.Resources>
-		<converters:BitmapConverter x:Key="BitmapConverter" />
+		<ResourceDictionary>
+			<converters:BitmapConverter x:Key="BitmapConverter" />
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Templates/ImageProcessingTemplates.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -35,52 +37,10 @@
 		</ScrollViewer>
 
 		<ScrollViewer Grid.Column="1">
-			<ItemsControl ItemsSource="{Binding ImageProcessingPipeline}">
-				<ItemsControl.Resources>
-					<DataTemplate DataType="{x:Type ipservices:GrayScaleImageProcessingService}">
-						<uc:GrayScaleImageProcessingConfigView/>
-					</DataTemplate>
-					<!--<DataTemplate DataType="{x:Type ipservices:GaussianBlurImageProcessingService}">
-						--><!--<uc:GaussianBlurImageProcessingConfigView DataContext="{Binding}" ServiceConfig="{Binding ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />--><!--
-						<uc:GaussianBlurImageProcessingConfigView DataContext="{Binding}" ServiceConfig="{Binding ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-					</DataTemplate>-->
-				</ItemsControl.Resources>
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Vertical"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border BorderBrush="Black" BorderThickness="0,1,0,1">
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="15"/>
-								</Grid.ColumnDefinitions>
-
-								<!--ContentControl Grid.Column="0" Content="{Binding ImageProcessingService}"/>-->
-								<!--<uc:GaussianBlurImageProcessingConfigView ServiceConfig="{Binding ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />-->
-								<uc:GaussianBlurImageProcessingConfigView ServiceConfig="{Binding DataContext.ImageProcessingConfig, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-
-
-								<StackPanel Grid.Column="1">
-									<Button Content="↑"
-											Command="{Binding DataContext.MoveUpStageInImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
-											CommandParameter="{Binding}"/>
-									<Button Content="X" 
-											Command="{Binding DataContext.DeleteStageFromImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
-											CommandParameter="{Binding}"/>
-									<Button Content="↓"
-											Command="{Binding DataContext.MoveDownStageInImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
-											CommandParameter="{Binding}"/>
-								</StackPanel>
-
-							</Grid>
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
+			<ItemsControl ItemsSource="{Binding ImageProcessingPipeline}" 
+                      ItemTemplateSelector="{StaticResource imageProcessingStepDataTemplateSelector}">
 			</ItemsControl>
+
 		</ScrollViewer>
 
 		<Grid Grid.Column="2">
@@ -108,9 +68,6 @@
 
 			<StackPanel Grid.Row="3">
 				<Button x:Name="btnRunPipeline" Grid.Row="3" Content="ProcessImage" Command="{Binding Path=RunPipelineButtonCommand}"/>
-				<!--<uc:GaussianBlurImageProcessingConfigView ServiceConfig="{Binding DataContext.TestConfig, RelativeSource={RelativeSource AncestorType={x:Type local:ImageProcessingSettingsView}}}" />-->
-
-				<!--<uc:GaussianBlurImageProcessingConfigView UserControlProperty="{Binding DataContext.TestConfig, RelativeSource={RelativeSource AncestorType={x:Type local:ImageProcessingSettingsView}}}" />-->
 			</StackPanel>
 		</Grid>
 	</Grid>

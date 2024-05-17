@@ -4,22 +4,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Data;
 using TextToSpeech.Model.ImagePrcessing;
-using TextToSpeech.Properties;
 using TextToSpeech.Services;
 using TextToSpeech.Services.ImagePrcessingServices;
 using TextToSpeech.Services.ImagePrcessingStages;
 using TextToSpeech.Services.Interfaces;
 using TextToSpeech.Utility;
 using TextToSpeech.Views;
-using TextToSpeech.Views.UserControlls;
-using Windows.Foundation.Collections;
-using Windows.Globalization;
 
 namespace TextToSpeech.ViewModels
 {
@@ -31,8 +22,6 @@ namespace TextToSpeech.ViewModels
 		private Bitmap _imageBitmap;
 		private ObservableCollection<Bitmap> _imageBitmapList = new ObservableCollection<Bitmap>();
 		private List<ImageProcessingStage> _imageProcessingPipeline = new List<ImageProcessingStage>();
-		private GaussianBlurImageProcessingConfig _config;
-
 		private readonly ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 
 		#endregion
@@ -55,8 +44,6 @@ namespace TextToSpeech.ViewModels
 			} 
 		}
 
-		public GaussianBlurImageProcessingConfig TestConfig { get { return _config; } set { _config = value; OnPropertyChanged(nameof(TestConfig)); } }
-		//public string TestConfig { get { return "TestString987654321"; } }
 		#endregion
 
 		#region COMMANDS

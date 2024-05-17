@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Drawing.Imaging;
 using TextToSpeech.Services.Interfaces;
 using TextToSpeech.Model;
 using TextToSpeech.Views;

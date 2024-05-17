@@ -17,21 +17,28 @@ namespace TextToSpeech.Services.ImagePrcessingStages
 		/// <returns></returns>
 		public Bitmap ProcessImage(Bitmap original, IImageProcessingConfig? config = null)
 		{
-			var innerConfig = config as GaussianBlurImageProcessingConfig;
-			if (innerConfig is null)
+			try
 			{
-				innerConfig = new GaussianBlurImageProcessingConfig();
+				var innerConfig = config as GaussianBlurImageProcessingConfig;
+				if (innerConfig is null)
+				{
+					innerConfig = new GaussianBlurImageProcessingConfig();
+				}
+
+				// Convert System.Drawing.Bitmap to OpenCvSharp's Mat
+				Mat originalMat = original.ToMat();
+
+				// Apply Gaussian blur
+				Mat gaussianBlurredMat = new Mat();
+				Cv2.GaussianBlur(originalMat, gaussianBlurredMat, new Size(innerConfig.Width, innerConfig.Height), sigmaX: innerConfig.SigmaX, sigmaY: innerConfig.SigmaY);
+
+				// Convert the Mat back to Bitmap
+				return gaussianBlurredMat.ToBitmap();
 			}
-
-			// Convert System.Drawing.Bitmap to OpenCvSharp's Mat
-			Mat originalMat = original.ToMat();
-
-			// Apply Gaussian blur
-			Mat gaussianBlurredMat = new Mat();
-			Cv2.GaussianBlur(originalMat, gaussianBlurredMat, new Size(innerConfig.Width, innerConfig.Height), sigmaX: innerConfig.SigmaX, sigmaY: innerConfig.SigmaY);
-
-			// Convert the Mat back to Bitmap
-			return gaussianBlurredMat.ToBitmap();
+			catch
+			{
+				return original;
+			}
 		}
 	}
 }

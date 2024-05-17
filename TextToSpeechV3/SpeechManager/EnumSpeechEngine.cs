@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TextToSpeech.SpeechManager
+﻿namespace TextToSpeech.SpeechManager
 {
 	public enum EnumSpeechEngine
 	{

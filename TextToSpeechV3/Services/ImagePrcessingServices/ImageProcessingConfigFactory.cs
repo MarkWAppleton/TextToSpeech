@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TextToSpeech.Model.ImagePrcessing;
-using TextToSpeech.Services.ImagePrcessingStages;
-using TextToSpeech.Services.Interfaces;
 using TextToSpeech.Utility;
 
 namespace TextToSpeech.Services.ImagePrcessingServices

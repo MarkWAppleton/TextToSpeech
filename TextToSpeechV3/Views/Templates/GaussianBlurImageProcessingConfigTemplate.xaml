@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<DataTemplate x:Key="GaussianBlurImageProcessingConfigTemplate">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<Label Grid.Row="0" Content="Gaussian Blur" FontWeight="Bold"/>
+
+			<Grid Grid.Row="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<Label Grid.Column="0" Grid.Row="0" Content="Width"/>
+				<TextBox x:Name="txtWidth" Grid.Column="1" Grid.Row="0" Text="{Binding ImageProcessingConfig.Width}" VerticalAlignment="Center"/>
+				<Label Grid.Column="0" Grid.Row="1" Content="Height"/>
+				<TextBox x:Name="txtHeight" Grid.Column="1" Grid.Row="1" Text="{Binding ImageProcessingConfig.Height}" VerticalAlignment="Center"/>
+				<Label Grid.Column="0" Grid.Row="2" Content="Sigma X"/>
+				<TextBox x:Name="txtSigmaX" Grid.Column="1" Grid.Row="2" Text="{Binding ImageProcessingConfig.SigmaX}" VerticalAlignment="Center"/>
+				<Label Grid.Column="0" Grid.Row="3" Content="Sigma Y"/>
+				<TextBox x:Name="txtSigmaY" Grid.Column="1" Grid.Row="3" Text="{Binding ImageProcessingConfig.SigmaY}" VerticalAlignment="Center"/>
+
+			</Grid>
+		</Grid>
+	</DataTemplate>
+</ResourceDictionary>
