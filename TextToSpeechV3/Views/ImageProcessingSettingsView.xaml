@@ -37,10 +37,37 @@
 		</ScrollViewer>
 
 		<ScrollViewer Grid.Column="1">
-			<ItemsControl ItemsSource="{Binding ImageProcessingPipeline}" 
-                      ItemTemplateSelector="{StaticResource imageProcessingStepDataTemplateSelector}">
-			</ItemsControl>
+			<ItemsControl ItemsSource="{Binding ImageProcessingPipeline}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border BorderBrush="Black" BorderThickness="0,1,0,1">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="15"/>
+								</Grid.ColumnDefinitions>
 
+								<!--ContentControl Grid.Column="0" Content="{Binding ImageProcessingService}"/>-->
+								<ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource imageProcessingStepDataTemplateSelector}" />
+
+
+								<StackPanel Grid.Column="1">
+									<Button Content="↑"
+											Command="{Binding DataContext.MoveUpStageInImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+											CommandParameter="{Binding}"/>
+									<Button Content="X" 
+											Command="{Binding DataContext.DeleteStageFromImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+											CommandParameter="{Binding}"/>
+									<Button Content="↓"
+											Command="{Binding DataContext.MoveDownStageInImageProcessingPipeline, RelativeSource={RelativeSource AncestorType=Window}}" 
+											CommandParameter="{Binding}"/>
+								</StackPanel>
+
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 		</ScrollViewer>
 
 		<Grid Grid.Column="2">

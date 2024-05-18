@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:selectors="clr-namespace:TextToSpeech.View.DataTemplateSelectors">
 	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="ResizeImageProcessingConfigTemplate.xaml"/>
 		<ResourceDictionary Source="GrayScaleImageProcessingConfigTemplate.xaml"/>
 		<ResourceDictionary Source="GaussianBlurImageProcessingConfigTemplate.xaml"/>
 		<ResourceDictionary Source="MedianBlurImageProcessingConfigTemplate.xaml"/>
@@ -10,8 +11,9 @@
 
 	<selectors:ImageProcessingStepDataTemplateSelector 
 		x:Key="imageProcessingStepDataTemplateSelector"
-		GaussianBlurImageProcessingConfigTemplate="{StaticResource GaussianBlurImageProcessingConfigTemplate}" 
+		ResizeImageProcessingConfigTemplate="{StaticResource ResizeImageProcessingConfigTemplate}" 
 		GrayScaleImageProcessingConfigTemplate="{StaticResource GrayScaleImageProcessingConfigTemplate}" 
+		GaussianBlurImageProcessingConfigTemplate="{StaticResource GaussianBlurImageProcessingConfigTemplate}" 
 		MedianBlurImageProcessingConfigTemplate="{StaticResource MedianBlurImageProcessingConfigTemplate}" 
 		ThresholdingImageProcessingConfigTemplate="{StaticResource ThresholdingImageProcessingConfigTemplate}" 
 		/>

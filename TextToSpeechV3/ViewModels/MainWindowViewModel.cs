@@ -23,7 +23,7 @@ namespace TextToSpeech.ViewModels
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
 		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
 		private IOcrEngine _ocrEngine = new TesseractOcrEngine();
-		private IImageProcessingService _imageProcessingService = new SimpleResizeImageProcessingService();
+		private IImageProcessingService _imageProcessingService = new ResizeImageProcessingService();
 		private ISetScreenshotLocation _setScreenshotLocation = new SetScreenshotLocation();
 		private ICreateBitmapService _createBitmapService = new CreateBitmapService();
 		private Dictionary<EnumFeature, IHotKeyRegister> _activeHotkeys = new Dictionary<EnumFeature, IHotKeyRegister>();

@@ -9,6 +9,7 @@ namespace TextToSpeech.Services.ImagePrcessingStages
 		public static IImageProcessingService CreateService(EnumImageProcessingStages enumImageProcessingStages) =>
 			enumImageProcessingStages switch
 			{
+				EnumImageProcessingStages.Resize => new ResizeImageProcessingService(),
 				EnumImageProcessingStages.GrayScale => new GrayScaleImageProcessingService(),
 				EnumImageProcessingStages.GaussianBlur => new GaussianBlurImageProcessingService(),
 				EnumImageProcessingStages.MedianBlur => new MedianBlurImageProcessingService(),

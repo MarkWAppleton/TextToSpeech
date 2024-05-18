@@ -4,13 +4,19 @@ using TextToSpeech.Services.Interfaces;
 
 namespace TextToSpeech.Services.ImagePrcessingStages
 {
-	public class SimpleResizeImageProcessingService : IImageProcessingService
+	public class ResizeImageProcessingService : IImageProcessingService
     {
         public Bitmap ProcessImage(Bitmap original, IImageProcessingConfig? config = null)
         {
             try
-            {
-                return new Bitmap(original, new Size(original.Width * 2, original.Height * 2));
+			{
+				var innerConfig = config as ResizeImageProcessingConfig;
+				if (innerConfig is null)
+				{
+					innerConfig = new ResizeImageProcessingConfig();
+				}
+
+				return new Bitmap(original, new Size(original.Width * innerConfig.WidthMultiplier, original.Height * innerConfig.HeightMultiplier));
             }
             catch
             {

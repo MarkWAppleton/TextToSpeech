@@ -2,6 +2,7 @@
 {
 	public enum EnumImageProcessingStages
 	{
+		Resize,
 		GrayScale,
 		GaussianBlur,
 		MedianBlur,

@@ -7,8 +7,9 @@ namespace TextToSpeech.View.DataTemplateSelectors
 {
 	public class ImageProcessingStepDataTemplateSelector : DataTemplateSelector
 	{
-		public DataTemplate GaussianBlurImageProcessingConfigTemplate { get; set; }
+		public DataTemplate ResizeImageProcessingConfigTemplate { get; set; }
 		public DataTemplate GrayScaleImageProcessingConfigTemplate { get; set; }
+		public DataTemplate GaussianBlurImageProcessingConfigTemplate { get; set; }
 		public DataTemplate MedianBlurImageProcessingConfigTemplate { get; set; }
 		public DataTemplate ThresholdingImageProcessingConfigTemplate { get; set; }
 		
@@ -18,6 +19,7 @@ namespace TextToSpeech.View.DataTemplateSelectors
 			{
 				return stage.ImageProcessingService switch
 				{
+					ResizeImageProcessingService => ResizeImageProcessingConfigTemplate,
 					GrayScaleImageProcessingService => GrayScaleImageProcessingConfigTemplate,
 					GaussianBlurImageProcessingService => GaussianBlurImageProcessingConfigTemplate,
 					MedianBlurImageProcessingService => MedianBlurImageProcessingConfigTemplate,
