@@ -19,6 +19,7 @@ namespace TextToSpeech.ViewModels
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{
 		#region PRIVATE PROPERTIES
+		private SpeechSettings _speechSettings;
 		private ISpeechManager _speechManager;
 		private ICopyTextFromScreenService _copyTextFromScreenService = new CopyTextFromScreenService();
 		private ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
@@ -67,10 +68,11 @@ namespace TextToSpeech.ViewModels
 					Voice = "",
 					Engine = EnumSpeechEngine.Legacy,
 				});
-			
-			_speechManager = SpeechManagerFactory.CreateSpeechManager(Settings);
+			_speechSettings = Settings;
 
-			AddSupportedHotkeys(Settings);
+			_speechManager = SpeechManagerFactory.CreateSpeechManager(_speechSettings);
+
+			AddSupportedHotkeys(_speechSettings);
 			RegisterAllHotkeys();
 
 			_settingsButtonCommand = new RelayCommand<object>(SettingsButtonCommandMethod);
@@ -88,7 +90,7 @@ namespace TextToSpeech.ViewModels
 			try
 			{
 				string text = _copyTextFromScreenService.GetTextFromScreen();
-				_speechManager.SpeakText(text);
+				_speechManager.SpeakText(TextProcessing.ProcessTextForSpeech(text));
 			}
 			catch (Exception ex)
 			{
@@ -120,9 +122,7 @@ namespace TextToSpeech.ViewModels
 				//string orcResult = _ocrEngine.RunOcr(processed);
 
 				string orcResult = _ocrEngine.RunOcr(snippingResult);
-				string unescapedText = Regex.Unescape(orcResult);
-				string processedText = unescapedText.Replace("\n", " ");
-				_speechManager.SpeakText(processedText);
+				_speechManager.SpeakText(TextProcessing.ProcessTextForSpeech(orcResult));
 			} 
 			catch(Exception ex)
 			{
@@ -142,9 +142,7 @@ namespace TextToSpeech.ViewModels
 			{
 				Bitmap image = _createBitmapService.CreateBitmap(screenshotLocation.ToRectangle());
 				string orcResult = _ocrEngine.RunOcr(image);
-				string unescapedText = Regex.Unescape(orcResult);
-				string processedText = unescapedText.Replace("\n", " ");
-				_speechManager.SpeakText(processedText);
+				_speechManager.SpeakText(TextProcessing.ProcessTextForSpeech(orcResult));
 			}
 		}
 
@@ -166,18 +164,8 @@ namespace TextToSpeech.ViewModels
 
 		public void ImageProcessingSettingsButtonCommandMethod(object _)
 		{
-			ImageProcessingSettingsView imageProcessingSettingsView = new ImageProcessingSettingsView();
+			ImageProcessingSettingsView imageProcessingSettingsView = new ImageProcessingSettingsView(_speechSettings);
 			imageProcessingSettingsView.ShowDialog();
-			//if (settingsView.SpeechSettings == null)
-			//{
-			//	return;
-			//}
-			//Settings = settingsView.SpeechSettings;
-
-			//UnregisterHotkeys();
-			//_speechManager.SetAllSettings(Settings);
-			//RegisterAllHotkeys();
-			//OnPropertyChanged(nameof(Settings));
 		}
 
 		public void AboutCommandMethod(object nothing)

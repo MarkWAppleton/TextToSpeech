@@ -1,14 +1,17 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using TextToSpeech.Model;
 using TextToSpeech.Model.ImagePrcessing;
 using TextToSpeech.Services;
 using TextToSpeech.Services.ImagePrcessingServices;
 using TextToSpeech.Services.ImagePrcessingStages;
 using TextToSpeech.Services.Interfaces;
+using TextToSpeech.SpeechManager;
 using TextToSpeech.Utility;
 using TextToSpeech.Views;
 
@@ -19,10 +22,12 @@ namespace TextToSpeech.ViewModels
 
 		#region PRIVATE PROPERTIES
 		private ImageProcessingSettingsView _view;
+		private ISpeechManager _speechManager;
 		private Bitmap _imageBitmap;
 		private ObservableCollection<Bitmap> _imageBitmapList = new ObservableCollection<Bitmap>();
 		private List<ImageProcessingStage> _imageProcessingPipeline = new List<ImageProcessingStage>();
 		private readonly ISnippingScreenshot _snippingScreenshot = new SnippingScreenshot();
+		private readonly IOcrEngine _ocrEngine = new TesseractOcrEngine();
 
 		#endregion
 
@@ -44,17 +49,26 @@ namespace TextToSpeech.ViewModels
 			} 
 		}
 
+		//TODO https://stackoverflow.com/questions/1547124/wpf-combobox-listbox-with-multiselect-based-on-enum-with-flags
+		public ObservableCollection<ThresholdTypes> ThresholdTypes {
+			get
+			{
+				return new ObservableCollection<ThresholdTypes>(Enum.GetValues(typeof (ThresholdTypes)).Cast<ThresholdTypes>());
+			}
+		}
 		#endregion
 
 		#region COMMANDS
 		private RelayCommand<string> _takeScreenshotButtonCommand;
 		private RelayCommand<string> _runPipelineButtonCommand;
+		private RelayCommand<string> _readScreenshotCommand;
 		private RelayCommand<EnumImageProcessingStages> _addStageToImageProcessingPipeline;
 		private RelayCommand<ImageProcessingStage> _deleteStageFromImageProcessingPipeline;
 		private RelayCommand<ImageProcessingStage> _moveUpStageInImageProcessingPipeline;
 		private RelayCommand<ImageProcessingStage> _moveDownStageInImageProcessingPipeline;
 		public RelayCommand<string> TakeScreenshotButtonCommand { get { return _takeScreenshotButtonCommand; } }
 		public RelayCommand<string> RunPipelineButtonCommand { get { return _runPipelineButtonCommand; } }
+		public RelayCommand<string> ReadScreenshotCommand { get { return _readScreenshotCommand; } }
 		public RelayCommand<EnumImageProcessingStages> AddStageToImageProcessingPipeline { get { return _addStageToImageProcessingPipeline; } }
 		public RelayCommand<ImageProcessingStage> DeleteStageFromImageProcessingPipeline { get { return _deleteStageFromImageProcessingPipeline; } }
 		public RelayCommand<ImageProcessingStage> MoveUpStageInImageProcessingPipeline { get { return _moveUpStageInImageProcessingPipeline; } }
@@ -62,16 +76,22 @@ namespace TextToSpeech.ViewModels
 		#endregion
 
 		#region CONSTRUTORS
-		public ImageProcessingSettingsViewModel(ImageProcessingSettingsView view)
+		public ImageProcessingSettingsViewModel(
+			ImageProcessingSettingsView view,
+			SpeechSettings speechSettings)
         {
 			_view = view;
+			_speechManager = SpeechManagerFactory.CreateSpeechManager(speechSettings);
 			_takeScreenshotButtonCommand = new RelayCommand<string>(TakeScreenshotButtonCommandMethod);
 			_runPipelineButtonCommand = new RelayCommand<string>(RunPipelineButtonCommandMethod);
+			_readScreenshotCommand = new RelayCommand<string>(ReadScreenshotCommandMethod);
 			_addStageToImageProcessingPipeline = new RelayCommand<EnumImageProcessingStages>(AddStageToImageProcessingPipelineMethod);
 			_deleteStageFromImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(DeleteStageFromImageProcessingPipelineDeleteMethod);
 			_deleteStageFromImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(DeleteStageFromImageProcessingPipelineDeleteMethod);
 			_moveUpStageInImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(MoveUpStageInImageProcessingPipelineMethod);
 			_moveDownStageInImageProcessingPipeline = new RelayCommand<ImageProcessingStage>(MoveDownStageInImageProcessingPipelineMethod);
+			//Add default of resize
+			AddStageToImageProcessingPipelineMethod(EnumImageProcessingStages.Resize);
 		}
 		#endregion
 
@@ -93,6 +113,19 @@ namespace TextToSpeech.ViewModels
 				processedImage = step.ImageProcessingService.ProcessImage(processedImage, step.ImageProcessingConfig);
 				ImageBitmapList.Add(processedImage);
 			});
+		}
+
+		public void ReadScreenshotCommandMethod(string _)
+		{
+			if(_speechManager.IsSpeaking)
+			{
+				_speechManager.StopSpeaking();
+				return;
+			}
+			//TODO finish alling all config controls
+			//TODO save pipeline
+			string imageText = _ocrEngine.RunOcr(ImageBitmapList.Last());
+			_speechManager.SpeakText(imageText);
 		}
 
 		public void AddStageToImageProcessingPipelineMethod(EnumImageProcessingStages newStage)

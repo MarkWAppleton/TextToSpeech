@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using TextToSpeech.Model;
 using TextToSpeech.ViewModels;
 
 namespace TextToSpeech.Views
@@ -9,9 +10,9 @@ namespace TextToSpeech.Views
 	/// </summary>
 	public partial class ImageProcessingSettingsView : Window
 	{
-		public ImageProcessingSettingsView()
+		public ImageProcessingSettingsView(SpeechSettings speechSettings)
 		{
-			ImageProcessingSettingsViewModel vm = new ImageProcessingSettingsViewModel(this);
+			ImageProcessingSettingsViewModel vm = new ImageProcessingSettingsViewModel(this, speechSettings);
 			DataContext = vm;
 			if (vm.CloseAction == null)
 			{

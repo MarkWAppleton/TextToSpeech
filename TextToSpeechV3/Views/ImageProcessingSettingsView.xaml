@@ -94,7 +94,8 @@
 			</StackPanel>
 
 			<StackPanel Grid.Row="3">
-				<Button x:Name="btnRunPipeline" Grid.Row="3" Content="ProcessImage" Command="{Binding Path=RunPipelineButtonCommand}"/>
+				<Button x:Name="btnRunPipeline" Grid.Row="3" Content="Process Image" Command="{Binding Path=RunPipelineButtonCommand}"/>
+				<Button x:Name="btnReadScreenshot" Grid.Row="3" Content="Read Screenshot" Command="{Binding Path=ReadScreenshotCommand}"/>
 			</StackPanel>
 		</Grid>
 	</Grid>
