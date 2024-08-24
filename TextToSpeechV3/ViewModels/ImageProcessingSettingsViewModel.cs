@@ -110,6 +110,7 @@ namespace TextToSpeech.ViewModels
 			ImageBitmapList.Add(_imageBitmap);
 			_imageProcessingPipeline.ForEach(step =>
 			{
+				var test = step.ImageProcessingConfig as ThresholdingImageProcessingConfig;
 				processedImage = step.ImageProcessingService.ProcessImage(processedImage, step.ImageProcessingConfig);
 				ImageBitmapList.Add(processedImage);
 			});

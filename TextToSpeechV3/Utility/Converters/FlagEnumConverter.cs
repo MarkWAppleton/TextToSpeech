@@ -55,23 +55,43 @@ namespace TextToSpeech.Utility.Converters
 			return false;
 		}
 
+		//public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+		//{
+		//	if (value is bool isChecked && parameter is ThresholdTypes flag)
+		//	{
+		//		var enumValue = (ThresholdTypes)targetTypes[0];
+		//		if (isChecked)
+		//		{
+		//			return new object[] { enumValue | flag };
+		//		}
+		//		else
+		//		{
+		//			return new object[] { enumValue & ~flag };
+		//		}
+		//	}
+		//	return new object[] { Binding.DoNothing };
+
+		//}
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
 		{
-			if (value is bool isChecked && parameter is ThresholdTypes flag)
+			if (value is bool isChecked && parameter is ThresholdTypes flag && targetTypes[0] == typeof(ThresholdTypes))
 			{
-				var enumValue = (ThresholdTypes)targetTypes[0];
-				if (isChecked)
+				if (parameter is object[] parameters && parameters[0] is ThresholdTypes enumValue)
 				{
-					return new object[] { enumValue | flag };
-				}
-				else
-				{
-					return new object[] { enumValue & ~flag };
+					if (isChecked)
+					{
+						return new object[] { enumValue | flag };
+					}
+					else
+					{
+						return new object[] { enumValue & ~flag };
+					}
 				}
 			}
 			return new object[] { Binding.DoNothing };
-
 		}
+
+
 	}
 
 

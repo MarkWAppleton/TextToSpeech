@@ -7,7 +7,9 @@ using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using TextToSpeech.Hotkeys;
 using TextToSpeech.Model;
+using TextToSpeech.Model.ImagePrcessing;
 using TextToSpeech.Services;
+using TextToSpeech.Services.ImagePrcessingServices;
 using TextToSpeech.Services.ImagePrcessingStages;
 using TextToSpeech.Services.Interfaces;
 using TextToSpeech.SpeechManager;
@@ -115,13 +117,21 @@ namespace TextToSpeech.ViewModels
 
 				//Images.Add(BitmapConverter.ToBitmapImage(snippingResult));
 
-				//List<Bitmap> imageProcessing;
 				Bitmap processed = _imageProcessingService.ProcessImage(snippingResult);
+				//List<Bitmap> imageProcessing;
 				//imageProcessing.ForEach(f => Images.Add(BitmapConverter.ToBitmapImage(f)));
 				//OnPropertyChanged(nameof(Image));
 				//string orcResult = _ocrEngine.RunOcr(processed);
 
-				string orcResult = _ocrEngine.RunOcr(snippingResult);
+				//Temp add Grayscale
+				var grayScale = new ImageProcessingStage()
+				{
+					ImageProcessingService = ImageProcessingServiceFactory.CreateService(EnumImageProcessingStages.GrayScale),
+					ImageProcessingConfig = ImageProcessingConfigFactory.CreateConfig(EnumImageProcessingStages.GrayScale),
+				};
+				var processed2 = grayScale.ImageProcessingService.ProcessImage(processed);
+
+				string orcResult = _ocrEngine.RunOcr(processed2);
 				_speechManager.SpeakText(TextProcessing.ProcessTextForSpeech(orcResult));
 			} 
 			catch(Exception ex)

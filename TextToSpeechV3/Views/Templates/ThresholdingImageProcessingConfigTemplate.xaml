@@ -46,25 +46,6 @@
 										</MultiBinding>
 									</CheckBox.IsChecked>
 								</CheckBox>
-
-
-
-								<!--<CheckBox Content="{Binding}"
-                                  IsChecked="{Binding ImageProcessingConfig.Type, 
-                                                      RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                      Converter={StaticResource FlagEnumConverter},
-                                                      ConverterParameter={Binding}}"/>-->
-								
-
-								<!--<CheckBox Content="{Binding}">
-									<CheckBox.IsChecked>
-										<MultiBinding Converter="{StaticResource FlagEnumMultiConverter}">
-											<Binding Path="DataContext.ThresholdTypes" RelativeSource="{RelativeSource AncestorType=Window}"/>
-											<Binding />
-										</MultiBinding>
-									</CheckBox.IsChecked>
-								</CheckBox>-->
-
 							</StackPanel>
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
