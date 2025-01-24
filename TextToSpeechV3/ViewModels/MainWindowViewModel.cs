@@ -96,7 +96,7 @@ namespace TextToSpeech.ViewModels
 			}
 			catch (Exception ex)
 			{
-				_mainWindow.ShowError(ex.Message);
+				//_mainWindow.ShowError(ex.Message);
 			}
 		}
 		
@@ -136,7 +136,7 @@ namespace TextToSpeech.ViewModels
 			} 
 			catch(Exception ex)
 			{
-				_mainWindow.ShowError(ex.Message);
+				//_mainWindow.ShowError(ex.Message);
 			}
 		}
 
