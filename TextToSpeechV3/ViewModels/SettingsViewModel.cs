@@ -92,6 +92,54 @@ namespace TextToSpeech.ViewModels
 			}
 		}
 
+
+		public Modifiers SetScreenshotLocationModifier
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.SetScreenshotLocation].Modifier;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.SetScreenshotLocation].Modifier = value;
+			}
+		}
+		public Keys SetScreenshotLocationKey
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.SetScreenshotLocation].Key;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.SetScreenshotLocation].Key = value;
+			}
+		}
+
+
+		public Modifiers SpeakScreenshotModifier
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.SpeakScreenshot].Modifier;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.SpeakScreenshot].Modifier = value;
+			}
+		}
+		public Keys SpeakScreenshotKey
+		{
+			get
+			{
+				return Settings.Hotkeys[EnumFeature.SpeakScreenshot].Key;
+			}
+			set
+			{
+				Settings.Hotkeys[EnumFeature.SpeakScreenshot].Key = value;
+			}
+		}
+
 		public string ErrorString 
 		{ 
 			get { return _errorString; } 

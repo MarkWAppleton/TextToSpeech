@@ -235,6 +235,17 @@ namespace TextToSpeech.ViewModels
 			instanceScreenshotHotkey.UnregisterHotkey();
 			instanceScreenshotHotkey.HotkeyTriggered -= InstantScreenshotHotkeyMethod;
 			_activeHotkeys.Remove(EnumFeature.InstantScreenshot);
+
+			IHotKeyRegister SetScreenshotLocationHotkey = _activeHotkeys[EnumFeature.SetScreenshotLocation];
+			SetScreenshotLocationHotkey.UnregisterHotkey();
+			SetScreenshotLocationHotkey.HotkeyTriggered -= SetScreenshotLocationHotkeyMethod;
+			_activeHotkeys.Remove(EnumFeature.SetScreenshotLocation);
+
+			IHotKeyRegister speakScreenshotHotkey = _activeHotkeys[EnumFeature.SpeakScreenshot];
+			speakScreenshotHotkey.UnregisterHotkey();
+			speakScreenshotHotkey.HotkeyTriggered -= ReadScreenshotHotkeyMethod;
+			_activeHotkeys.Remove(EnumFeature.SpeakScreenshot);
+
 		}
 
 		#endregion
